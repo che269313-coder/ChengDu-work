@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# 日志
+logs/*.log
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.bak
+~$*
+
+# 输出目录（HTML是最终产物，不过保留在git中）
+# output/*.html  # 如果希望跟踪HTML变化，取消注释

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研究生专区 - 成都小学数学教师招聘</title>
+<style>
+/* ===================================================================
+   成都小学数学教师招聘追踪系统 — 样式表
+   =================================================================== */
+
+/* --- Reset & Base --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --color-primary: #1a73e8;
+    --color-primary-dark: #1557b0;
+    --color-bg: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-text: #202124;
+    --color-text-secondary: #5f6368;
+    --color-border: #dadce0;
+    --color-active: #0d904f;
+    --color-upcoming: #e8a817;
+    --color-closed: #d93025;
+    --color-grad: #7c3aed;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* --- Header --- */
+.header {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: #fff;
+    padding: 32px 0 0;
+    box-shadow: var(--shadow-lg);
+}
+
+.header h1 { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+.header .subtitle { font-size: 14px; opacity: 0.85; margin-bottom: 8px; }
+.header .update-time { font-size: 12px; opacity: 0.7; }
+
+.nav {
+    display: flex;
+    gap: 4px;
+    margin-top: 16px;
+    padding: 0 24px;
+}
+
+.nav a {
+    color: rgba(255,255,255,0.75);
+    padding: 10px 20px;
+    border-radius: 8px 8px 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.08);
+}
+
+.nav a:hover, .nav a.active {
+    color: #fff;
+    background: rgba(255,255,255,0.18);
+    text-decoration: none;
+}
+
+.nav a.active { background: var(--color-bg); color: var(--color-text); }
+
+/* --- Main --- */
+main { padding: 24px 0 48px; }
+
+/* --- Toolbar --- */
+.toolbar {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 0;
+    flex-wrap: wrap;
+}
+
+#searchInput {
+    flex: 1;
+    min-width: 280px;
+    padding: 10px 16px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: 15px;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+#searchInput:focus { border-color: var(--color-primary); }
+
+.filter-buttons { display: flex; gap: 8px; }
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    background: var(--color-surface);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover { background: #e8f0fe; border-color: var(--color-primary); }
+.filter-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+/* --- Stats Panel --- */
+.stats-panel {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+}
+
+.stats-panel h2 { font-size: 18px; margin-bottom: 16px; }
+
+.stats-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.stat-card {
+    background: #f1f3f4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    min-width: 160px;
+    text-align: center;
+}
+
+.stat-card.total {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.stat-card h3 { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.stat-card.total h3 { color: rgba(255,255,255,0.7); }
+
+.stat-num { font-size: 36px; font-weight: 700; }
+
+.stat-detail { font-size: 12px; color: var(--color-text-secondary); margin-top: 8px; display: flex; flex-direction: column; gap: 2px; }
+.stat-card.total .stat-detail { color: rgba(255,255,255,0.8); }
+
+/* --- Upcoming Section --- */
+.upcoming-section {
+    background: linear-gradient(135deg, #fff8e1, #fff3cd);
+    border: 1px solid #f9d71c;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 16px 0;
+}
+
+.upcoming-section h2 { font-size: 18px; margin-bottom: 12px; }
+
+.upcoming-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.upcoming-card {
+    background: #fff;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow);
+}
+
+.date-badge {
+    background: var(--color-upcoming);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* --- Year Tabs --- */
+.year-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.year-tab {
+    padding: 10px 24px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.year-tab:hover { border-color: var(--color-primary); }
+.year-tab.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.year-content h2 { margin: 16px 0 12px; font-size: 22px; }
+
+/* --- Region Section --- */
+.region-section {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.region-title {
+    padding: 14px 20px;
+    background: #e8f0fe;
+    font-size: 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+/* --- Table --- */
+.table-wrapper { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+thead { background: #f8f9fa; }
+
+th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+}
+
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f3f4;
+    vertical-align: top;
+}
+
+tbody tr:hover { background: #f8f9fa; }
+
+td.deadline { color: var(--color-closed); font-weight: 500; }
+td.notes { max-width: 200px; font-size: 12px; color: var(--color-text-secondary); }
+td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
+
+/* --- Badges --- */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-active   { background: #e6f4ea; color: var(--color-active); }
+.badge-upcoming { background: #fef7e0; color: #9a6d0a; }
+.badge-closed   { background: #fce8e6; color: var(--color-closed); }
+.badge-info     { background: #e8f0fe; color: var(--color-primary); }
+
+/* --- Tags --- */
+.tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    background: #f1f3f4;
+    color: var(--color-text-secondary);
+    margin: 1px 2px;
+}
+
+/* --- Graduate Section --- */
+.grad-intro {
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border: 1px solid #c4b5fd;
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 16px 0;
+}
+
+.grad-intro h2 { font-size: 22px; color: var(--color-grad); margin-bottom: 8px; }
+.grad-intro p { margin: 8px 0; }
+
+.highlight-box {
+    background: #fff;
+    border-left: 4px solid var(--color-grad);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 12px;
+}
+
+.grad-section { margin: 24px 0; }
+.grad-section h3 { margin-bottom: 12px; font-size: 18px; }
+
+/* --- Advice --- */
+.advice-section {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 24px 0;
+    box-shadow: var(--shadow);
+}
+
+.advice-section h3 { font-size: 18px; margin-bottom: 16px; }
+
+.advice-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.advice-card {
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: var(--radius);
+}
+
+.advice-card h4 { font-size: 14px; margin-bottom: 6px; color: var(--color-primary); }
+.advice-card p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
+
+/* --- Footer --- */
+.footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 20px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-top: 32px;
+}
+
+.footer .disclaimer { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .container { padding: 0 12px; }
+    .header h1 { font-size: 22px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .filter-buttons { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+    .stat-card { min-width: 120px; }
+    .stat-num { font-size: 24px; }
+    .advice-cards { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<header class="header">
+<div class="container">
+<h1>📋 成都小学数学教师招聘追踪系统</h1>
+<p class="subtitle">覆盖成都市23个区县 · 自动更新 · 每两天同步</p>
+<p class="update-time">最后更新: 2026-05-29 16:44</p>
+<nav class="nav">
+<a href="index.html">📊 全部招聘</a>
+<a href="grad.html" class="active">🎓 研究生专区</a>
+</nav>
+</div>
+</header>
+<main class="container">
+<div class="grad-intro">
+<h2>🎓 研究生专区 — 面向成都大学教育学院</h2>
+<p>以下岗位对研究生学历有明确优先或硬性要求，适合成都大学教育学院硕士毕业生申请。</p>
+<p class="highlight-box"><strong>💡 特别提示：</strong> 成都大学附属小学（龙泉驿区）为成都大学直属附属学校，本校研究生有天然优势。地理位置紧邻校本部，方便兼顾学业与实习。</p>
+</div>
+<div class="toolbar">
+<input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 搜索学校、区域、标签...">
+</div>
+<div class="grad-section"><h3>🟢 正在招聘</h3>
+<div class="table-wrapper"><table><thead><tr>
+    <th>学校</th><th>岗位</th><th>区域</th><th>类型</th>
+    <th>薪资</th><th>学历要求</th><th>截止日期</th>
+    <th>状态</th><th>研究生优势</th><th>标签</th>
+</tr></thead><tbody><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都市蒙彼利埃小学</a></td>
+            <td>小学数学教师</td>
+            <td>高新区</td>
+            <td>公办</td>
+            <td class="salary">8K-12K/月</td>
+            <td>本科及以上，英语能力良好（国际化学校），硕士优先</td>
+            <td class="deadline">2026-06-10</td>
+            <td><span class="badge badge-active">进行中</span></td>
+            <td class="notes">国际化公立学校，硕士学历在职称评定中有优势</td>
+            <td><span class="tag">国际化</span> <span class="tag">公立</span> <span class="tag">硕士优先</span></td>
+        </tr></tbody></table></div></div><div class="grad-section"><h3>🟡 即将开始</h3>
+<div class="table-wrapper"><table><thead><tr>
+    <th>学校</th><th>岗位</th><th>区域</th><th>类型</th>
+    <th>薪资</th><th>学历要求</th><th>截止日期</th>
+    <th>状态</th><th>研究生优势</th><th>标签</th>
+</tr></thead><tbody><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都师范附属小学</a></td>
+            <td>小学数学教师</td>
+            <td>锦江区</td>
+            <td>公办</td>
+            <td class="salary">7K-11K/月</td>
+            <td>研究生学历优先，本科及以上</td>
+            <td class="deadline">2026-10-10</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">成都顶尖公立小学，研究生学历入编后可直接认定中级职称</td>
+            <td><span class="tag">名校</span> <span class="tag">职称优势</span> <span class="tag">研究生优先</span></td>
+        </tr><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都市玉林小学</a></td>
+            <td>小学数学教师</td>
+            <td>武侯区</td>
+            <td>公办</td>
+            <td class="salary">7K-10K/月</td>
+            <td>研究生学历优先</td>
+            <td class="deadline">2026-10-10</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">老牌优质小学，研究生学历竞争力明显</td>
+            <td><span class="tag">老牌名校</span> <span class="tag">研究生优先</span></td>
+        </tr><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都市电子科技大学附属实验小学</a></td>
+            <td>小学数学教师</td>
+            <td>成华区</td>
+            <td>公办</td>
+            <td class="salary">7K-12K/月</td>
+            <td>本科及以上，研究生学历优先</td>
+            <td class="deadline">2026-10-10</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">大学附属学校，可利用高校资源开展教研，适合有科研兴趣的研究生</td>
+            <td><span class="tag">大学附属</span> <span class="tag">科研平台</span> <span class="tag">研究生优先</span></td>
+        </tr><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都市泡桐树小学（天府校区）</a></td>
+            <td>小学数学教师</td>
+            <td>高新区</td>
+            <td>公办</td>
+            <td class="salary">9K-13K/月</td>
+            <td>硕士及以上或本科+3年经验</td>
+            <td class="deadline">2026-10-10</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">高新南区核心地段，生源优质，硕士学历基本为入门门槛</td>
+            <td><span class="tag">高新南区</span> <span class="tag">高薪</span> <span class="tag">硕士门槛</span></td>
+        </tr><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都天府新区第七小学</a></td>
+            <td>小学数学教师</td>
+            <td>天府新区</td>
+            <td>公办</td>
+            <td class="salary">8K-12K/月</td>
+            <td>硕士及以上优先</td>
+            <td class="deadline">2026-10-30</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">新开办学校，硕士可作为骨干培养对象，晋升空间大</td>
+            <td><span class="tag">新校</span> <span class="tag">晋升空间</span> <span class="tag">硕士优先</span></td>
+        </tr><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都大学附属小学</a></td>
+            <td>小学数学教师</td>
+            <td>龙泉驿区</td>
+            <td>公办</td>
+            <td class="salary">7K-10K/月</td>
+            <td>本科及以上，成都大学教育学院研究生优先</td>
+            <td class="deadline">2026-07-10</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">成都大学直属附属小学，本校研究生有天然优势，地理位置近校本部</td>
+            <td><span class="tag">成都大学附属</span> <span class="tag">本校优势</span> <span class="tag">地理便利</span></td>
+        </tr><tr>
+            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都市双流区实验小学</a></td>
+            <td>小学数学教师（教研方向）</td>
+            <td>双流区</td>
+            <td>公办</td>
+            <td class="salary">8K-12K/月</td>
+            <td>硕士及以上，数学教育方向优先</td>
+            <td class="deadline">2026-08-25</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">教研岗位，适合有研究能力的研究生，可结合论文方向</td>
+            <td><span class="tag">教研岗</span> <span class="tag">硕士必需</span> <span class="tag">科研结合</span></td>
+        </tr><tr>
+            <td><a href="https://www.jxfls.com/" target="_blank">成都嘉祥外国语学校（小学部）</a></td>
+            <td>小学数学教师</td>
+            <td>锦江区</td>
+            <td>民办</td>
+            <td class="salary">15K-25K/月</td>
+            <td>硕士及以上优先，有竞赛经验者优先</td>
+            <td class="deadline">2026-08-15</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">成都顶尖民办学校，薪资水平高，硕士学历可获更高起薪</td>
+            <td><span class="tag">民办</span> <span class="tag">高薪</span> <span class="tag">竞赛方向</span></td>
+        </tr><tr>
+            <td><a href="https://www.jinpingguo.com/" target="_blank">成都金苹果公学</a></td>
+            <td>小学数学教师</td>
+            <td>高新区</td>
+            <td>民办</td>
+            <td class="salary">12K-20K/月</td>
+            <td>硕士及以上，有国际教育背景者优先</td>
+            <td class="deadline">2026-09-15</td>
+            <td><span class="badge badge-upcoming">即将开始</span></td>
+            <td class="notes">高端民办学校，适合有教育创新兴趣的研究生</td>
+            <td><span class="tag">高端民办</span> <span class="tag">国际化</span> <span class="tag">硕士优先</span></td>
+        </tr></tbody></table></div></div><div class="advice-section"><h3>📝 研究生求职建议</h3>
+<div class="advice-cards">
+<div class="advice-card"><h4>🏫 公办学校优势</h4><p>硕士学历入编后可跳过初级职称评审，直接认定中级职称。高新区、天府新区等新区对硕士有政策倾斜。</p></div>
+<div class="advice-card"><h4>💼 民办学校机会</h4><p>嘉祥、金苹果等高端民办薪资可达15-25K/月。硕士学历在面试和薪资谈判中竞争力显著更强。</p></div>
+<div class="advice-card"><h4>📅 招聘周期</h4><p>成都事业单位公开招聘分上下半年：上半年3-4月发布公告，下半年9-10月发布公告。各区县夏季（6-8月）有补招。</p></div>
+<div class="advice-card"><h4>🔗 成都大学附属小学</h4><p>成都大学附属小学位于龙泉驿区，是成都大学直属学校。本校教育学院研究生可通过导师推荐获得优先面试机会。</p></div>
+</div></div>
+</main>
+<footer class="footer">
+<div class="container">
+<p>成都小学数学教师招聘追踪系统 · 自动更新于 2026-05-29 16:44</p>
+<p class="disclaimer">⚠️ 数据来源于公开渠道，仅供参考，请以官方公告为准。</p>
+</div>
+</footer>
+<script>
+function filterTable(){
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const sections = document.querySelectorAll('.grad-section');
+    sections.forEach(section => {
+        const rows = section.querySelectorAll('tbody tr');
+        let visible = 0;
+        rows.forEach(row => {
+            const text = row.textContent.toUpperCase();
+            if(text.indexOf(filter) > -1) {
+                row.style.display = '';
+                visible++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        section.style.display = visible > 0 ? '' : 'none';
+    });
+}
+</script>
+</body>
+</html>
