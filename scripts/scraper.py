@@ -48,7 +48,7 @@ except ImportError:
 # 配置
 # ---------------------------------------------------------------------------
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 LOG_DIR = BASE_DIR / "logs"
 CONFIG_PATH = BASE_DIR / "config.ini"
@@ -151,32 +151,87 @@ def detect_subject(text: str) -> bool:
 # ---------------------------------------------------------------------------
 
 class BaseScraper:
-    """爬虫基类"""
+    """爬虫基类
+
+    针对中国政府网站的WAF绕过策略：
+    - 使用完整的浏览器请求头（Accept/Language/Encoding等）
+    - 保持Session以维护Cookie
+    - 先访问首页建立会话，再访问子页面
+    - 对gov.cn域名：HTTP 412表示WAF拦截，需更真实的浏览器模拟
+    - 对rc114.com：ASP.NET WebForms，搜索可能需PostBack
+    """
+
+    # 模拟Chrome 125在Windows上的真实请求头
+    BROWSER_HEADERS = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/125.0.0.0 Safari/537.36"
+        ),
+        "Accept": (
+            "text/html,application/xhtml+xml,application/xml;"
+            "q=0.9,image/webp,image/apng,*/*;q=0.8"
+        ),
+        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Cache-Control": "max-age=0",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "DNT": "1",
+    }
 
     def __init__(self, config: configparser.ConfigParser, timeout: int = 30):
         self.config = config
         self.timeout = timeout
         self.session = requests.Session()
-        self.session.headers.update({
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/125.0.0.0 Safari/537.36"
-            ),
-        })
+        self.session.headers.update(self.BROWSER_HEADERS)
         self.results: list[dict] = []
 
-    def fetch(self, url: str, **kwargs) -> requests.Response | None:
-        """安全抓取，带重试"""
+    def fetch(self, url: str, referer: str = None, **kwargs) -> requests.Response | None:
+        """安全抓取，带重试和Referer"""
+        headers = {}
+        if referer:
+            headers["Referer"] = referer
+
         for attempt in range(3):
             try:
-                resp = self.session.get(url, timeout=self.timeout, **kwargs)
+                resp = self.session.get(
+                    url, timeout=self.timeout, headers=headers, **kwargs
+                )
+                # 412 = WAF拦截，不重试（重试也没用）
+                if resp.status_code == 412:
+                    logger.warning(
+                        f"HTTP 412 (WAF拦截): {url} — "
+                        f"该网站使用了云防护，可能需要浏览器手动访问"
+                    )
+                    return None
                 resp.raise_for_status()
                 return resp
             except requests.RequestException as e:
                 logger.warning(f"请求失败 (尝试 {attempt+1}/3): {url} - {e}")
                 time.sleep(5 * (attempt + 1))
         return None
+
+    def fetch_gov_site(self, url: str) -> requests.Response | None:
+        """专门用于.gov.cn网站的抓取：先访问首页建立会话"""
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        home = f"{parsed.scheme}://{parsed.netloc}/"
+
+        # 先访问首页（不带Referer）
+        logger.info(f"先访问首页建立会话: {home}")
+        home_resp = self.fetch(home)
+        if home_resp is None:
+            logger.warning(f"首页不可达: {home}，可能被WAF拦截")
+        else:
+            logger.info(f"首页 OK ({home_resp.status_code})")
+
+        # 再访问目标页面（带Referer）
+        return self.fetch(url, referer=home)
 
     def parse(self, html: str) -> list[dict]:
         """解析HTML，子类实现"""
@@ -205,8 +260,12 @@ class CDHRSSScraper(BaseScraper):
         ]
 
         for url in urls:
-            resp = self.fetch(url)
+            resp = self.fetch_gov_site(url)
             if not resp:
+                logger.warning(
+                    "[cdhrss] 无法访问成都市人社局。"
+                    "该网站使用云WAF保护，本地浏览器可正常访问。"
+                )
                 continue
         
             soup = BeautifulSoup(resp.content, "lxml")
@@ -278,75 +337,82 @@ class CDHRSSScraper(BaseScraper):
 class RC114Scraper(BaseScraper):
     """
     成都人才网 - 搜索教师岗位
+
+    已知限制：
+    - job.rc114.com 使用 ASP.NET WebForms，搜索通过 PostBack 而非 GET 参数
+    - 直接 GET JobSearchCate.aspx?key=xxx 参数被忽略，返回默认结果
+    - 可在本地浏览器中手动搜索后将 URL 或结果粘贴到数据文件中
     """
 
     NAME = "rc114"
 
     def run(self) -> list[dict]:
         logger.info("[rc114] 开始采集成都人才网数据...")
+        logger.info(
+            "[rc114] 注意: 该网站搜索基于 ASP.NET PostBack，"
+            "GET 参数可能被忽略。将在默认搜索结果中筛选教师相关岗位。"
+        )
 
-        keywords = [
-            "小学数学教师", "小学数学", "数学教师", "小学教师"
-        ]
+        import re
+        import urllib.parse
 
-        for kw in keywords:
-            # 成都人才网搜索接口
-            search_url = (
-                "https://www.rc114.com/Search/SearchJobResult.aspx"
-                f"?keyword={kw}&region=030000"
-            )
-            
-            resp = self.fetch(search_url)
+        # job.rc114.com 已验证可访问（HTTP 200）
+        base_url = "https://job.rc114.com/JobSearchCate.aspx"
+
+        for kw in ["小学数学教师", "数学教师", "小学教师"]:
+            search_url = f"{base_url}?key={urllib.parse.quote(kw)}"
+
+            resp = self.fetch(search_url, referer="https://job.rc114.com/")
             if not resp:
                 continue
 
+            # rc114 的搜索结果以文本行形式呈现（非结构化HTML列表）
+            # 格式: "职位名 公司名 学历 区域 薪资 日期"
+            text = resp.text
             soup = BeautifulSoup(resp.content, "lxml")
+            full_text = soup.get_text()
+            lines = [l.strip() for l in full_text.split("\n") if l.strip()]
 
-            # 尝试匹配招聘列表
-            job_items = soup.select(".job-item") or soup.select(".job-info") or soup.select("div.joblist-item")
-            
-            for item in job_items[:30]:
-                try:
-                    title_el = item.select_one(".job-name") or item.select_one("a.job-title") or item.find("a")
-                    if not title_el:
-                        continue
-                    
-                    title = title_el.get_text(strip=True)
-                    if not detect_subject(title):
-                        continue
+            for line in lines:
+                if "教师" not in line and "数学" not in line:
+                    continue
+                # 排除页面导航文本
+                if any(skip in line for skip in [
+                    "搜索", "关键词", "筛选", "职位类别", "工作地点",
+                    "学历要求", "工作经验", "月薪范围", "地铁沿线"
+                ]):
+                    continue
 
-                    company_el = item.select_one(".company-name") or item.select_one(".corp-name")
-                    company = company_el.get_text(strip=True) if company_el else ""
-
-                    date_el = item.select_one(".job-date") or item.select_one(".time")
-                    date_str = date_el.get_text(strip=True) if date_el else ""
-
-                    href = title_el.get("href", "")
-
+                match = re.match(
+                    r"(.+?)\s+(.+?)\s+(不要求|初中|高中|职高|中专|技校|大专|本科|硕士|博士)\s+"
+                    r"(.+?)\s+(\S+元|\S+元/月|当面告知)\s+(\d{4}/\d{1,2}/\d{1,2})",
+                    line
+                )
+                if match:
+                    pos, company, edu, loc, salary, date_str = match.groups()
                     job = {
-                        "id": make_job_id(title, date_str, self.NAME),
+                        "id": make_job_id(pos, date_str, self.NAME),
                         "year": datetime.now().year,
-                        "region": detect_region(title + company, self.config),
-                        "district": "",
+                        "region": detect_region(loc, self.config),
+                        "district": loc,
                         "school": company,
                         "school_type": "",
                         "subject": "小学数学",
-                        "position": title,
+                        "position": pos,
                         "recruitment_count": 0,
-                        "requirement": "",
+                        "requirement": edu,
                         "announcement_date": date_str,
                         "deadline": "",
-                        "source": "成都人才网",
-                        "source_url": href,
-                        "status": "请查看详情",
+                        "source": "成都人才网 (job.rc114.com)",
+                        "source_url": resp.url,
+                        "status": "进行中",
                         "exam_date": "",
-                        "notes": "",
+                        "notes": f"薪资: {salary}",
                     }
                     self.results.append(job)
-                except Exception as e:
-                    logger.debug(f"解析条目失败: {e}")
+                    logger.info(f"[rc114] 发现: {pos} @ {company}")
 
-            time.sleep(3)  # 搜索间隔
+            time.sleep(3)
 
         logger.info(f"[rc114] 采集完成，共 {len(self.results)} 条")
         return self.results

@@ -110,14 +110,16 @@ main{padding:24px 0 48px}
 <div class="icon">🔍</div>
 <h2>未能通过自动化工具获取</h2>
 <p style="text-align:left;max-width:700px;font-size:13px">
-2026年5月29日尝试了以下渠道搜索2025年成都小学数学教师招聘信息，均未返回有效结果：
+2026年5月29日尝试了以下渠道，诊断结果如下：
 </p>
-<ul style="list-style:disc;padding-left:24px;text-align:left;max-width:700px;margin:12px auto;font-size:13px;color:var(--txt2);line-height:2">
-<li>成都市人社局官网 (cdhrss.chengdu.gov.cn) — HTTP 412，网站有反爬保护</li>
-<li>四川省人社厅 (rst.sc.gov.cn) — 公告列表页404</li>
-<li>成都人才网 (rc114.com) — 搜索接口404</li>
-<li>Bing搜索引擎 — 返回内容与教师招聘完全无关（旅游攻略、百科词条等）</li>
-</ul>
+<table style="width:100%;max-width:700px;margin:12px auto;font-size:13px;border-collapse:collapse;text-align:left">
+<tr style="background:#f1f3f4"><th style="padding:8px 12px;text-align:left">渠道</th><th style="padding:8px 12px;text-align:left">状态</th><th style="padding:8px 12px;text-align:left">原因</th></tr>
+<tr><td style="padding:8px 12px">成都市人社局<br><small>cdhrss.chengdu.gov.cn</small></td><td style="padding:8px 12px;color:#d93025">HTTP 412</td><td style="padding:8px 12px;font-size:12px">云WAF保护。检测到自动化请求就拦截。需要在<strong>真实浏览器</strong>中手动访问才能通过验证。</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px">成都市政府网<br><small>chengdu.gov.cn</small></td><td style="padding:8px 12px;color:#d93025">HTTP 412</td><td style="padding:8px 12px;font-size:12px">同上。所有 *.chengdu.gov.cn 域名统一使用云WAF。</td></tr>
+<tr><td style="padding:8px 12px">四川省人社厅<br><small>rst.sc.gov.cn</small></td><td style="padding:8px 12px;color:#d93025">HTTP 404</td><td style="padding:8px 12px;font-size:12px">公告列表页URL已变更或需要从首页导航进入。</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px">成都人才网<br><small>rc114.com</small></td><td style="padding:8px 12px;color:#0d904f">HTTP 200 ✓</td><td style="padding:8px 12px;font-size:12px">网站可访问，但搜索功能依赖ASP.NET WebForms的PostBack机制，GET参数被忽略。默认搜索返回的528个岗位中没有教师类。</td></tr>
+<tr><td style="padding:8px 12px">Bing搜索引擎</td><td style="padding:8px 12px;color:#d93025">无效</td><td style="padding:8px 12px;font-size:12px">对中国政府网站索引极差，"教师招聘"搜出"血管痣""灭火原理"等完全无关内容。</td></tr>
+</table>
 <p style="text-align:left;max-width:700px;margin:16px auto;font-size:13px;line-height:1.8">
 <strong>建议你手动查找2025年数据的方法：</strong><br>
 1. 直接打开 <a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都市人社局官网</a>，在站内搜索"2025 教师 公开招聘"或"2025年成都市事业单位公开招聘"<br>
