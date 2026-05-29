@@ -2,136 +2,33 @@
   "meta": {
     "project": "成都小学数学教师招聘追踪",
     "last_updated": "2026-05-29",
-    "data_disclaimer": "⚠️ 以下数据基于成都教师招聘往年规律推断，非官方公告原文。具体学校、日期、人数请以各区县教育局和人社局官方公告为准。",
-    "data_quality": "推断-基于往年招聘周期规律",
-    "说明": "成都事业单位公开招聘（教育类）通常分上下半年：上半年3-4月发公告/4-5月笔试，下半年9-10月发公告/10-11月笔试。各区县夏季(6-8月)有单独补招。以下条目中的学校名称来自成都各区县知名小学（公开信息），具体年份是否有该岗位需待官方确认。"
+    "status": "暂无已核实的招聘数据",
+    "说明": "截至2026年5月29日，尚未通过官方渠道获取到可验证的成都小学数学教师招聘公告。以下为已知的官方信息获取渠道，待爬虫脚本抓取到真实数据后将自动填充。"
   },
-  "jobs": [
-    {
-      "id": "2025-ref-01",
-      "year": 2025,
-      "region": "市统一招聘",
-      "district": "成都市",
-      "school": "各区县公办小学（统一招聘）",
-      "school_type": "公办",
-      "subject": "小学数学",
-      "position": "小学数学教师",
-      "recruitment_count": "待确认",
-      "requirement": "本科及以上，具有教师资格证",
-      "announcement_date": "2025年3月（预计）",
-      "deadline": "2025年4月（预计）",
-      "source": "成都市人社局",
-      "source_url": "https://cdhrss.chengdu.gov.cn/",
-      "status": "已截止（2025年上半年统招）",
-      "exam_date": "2025年4月-5月（预计）",
-      "notes": "成都市2025年上半年事业单位公开招聘（教育类）。各区县均有小学数学教师岗位放出，具体学校及人数以当年公告为准。往年参考：高新区、天府新区、锦江区、青羊区等中心城区通常岗位较多。",
-      "data_quality": "推断-基于往年周期规律",
-      "verify_url": "https://cdhrss.chengdu.gov.cn/ — 搜索'2025年成都市事业单位公开招聘'"
-    },
-    {
-      "id": "2025-ref-02",
-      "year": 2025,
-      "region": "天府新区",
-      "district": "天府新区",
-      "school": "天府新区各公办小学（单独招聘）",
-      "school_type": "公办",
-      "subject": "小学数学",
-      "position": "小学数学教师",
-      "recruitment_count": "待确认",
-      "requirement": "本科及以上，35周岁以下",
-      "announcement_date": "2025年3月-4月（预计）",
-      "deadline": "2025年4月-5月（预计）",
-      "source": "天府新区社事局",
-      "source_url": "https://cdhrss.chengdu.gov.cn/",
-      "status": "已截止（2025年上半年）",
-      "exam_date": "2025年5月（预计）",
-      "notes": "天府新区通常在统一招聘外单独组织教师招聘，岗位数较多。2025年具体情况需查当年公告。",
-      "data_quality": "推断-基于往年规律",
-      "verify_url": "https://cdhrss.chengdu.gov.cn/ — 搜索'天府新区 教师招聘 2025'"
-    },
-    {
-      "id": "2025-ref-03",
-      "year": 2025,
-      "region": "市统一招聘",
-      "district": "成都市",
-      "school": "各区县公办小学（统一招聘）",
-      "school_type": "公办",
-      "subject": "小学数学",
-      "position": "小学数学教师",
-      "recruitment_count": "待确认",
-      "requirement": "本科及以上",
-      "announcement_date": "2025年9月（预计）",
-      "deadline": "2025年10月（预计）",
-      "source": "成都市人社局",
-      "source_url": "https://cdhrss.chengdu.gov.cn/",
-      "status": "已截止（2025年下半年统招）",
-      "exam_date": "2025年10月-11月（预计）",
-      "notes": "成都市2025年下半年事业单位公开招聘（教育类）。下半年岗位数通常少于上半年。",
-      "data_quality": "推断-基于往年周期规律",
-      "verify_url": "https://cdhrss.chengdu.gov.cn/ — 搜索'2025年下半年 成都市事业单位公开招聘'"
-    },
-    {
-      "id": "2025-ref-04",
-      "year": 2025,
-      "region": "各区县",
-      "district": "成都市",
-      "school": "各区县公办小学（夏季补招）",
-      "school_type": "公办",
-      "subject": "小学数学",
-      "position": "小学数学教师",
-      "recruitment_count": "待确认",
-      "requirement": "本科及以上",
-      "announcement_date": "2025年6月-8月",
-      "deadline": "2025年7月-8月",
-      "source": "各区县教育局",
-      "source_url": "https://cdhrss.chengdu.gov.cn/",
-      "status": "已截止（2025年夏季）",
-      "exam_date": "各区县自行安排",
-      "notes": "2025年夏季各区县可能有单独补招，需分别关注各区县教育局公告。往年温江区、郫都区、新都区等夏季补招较常见。",
-      "data_quality": "推断-基于往年规律",
-      "verify_url": "各区县教育局官网"
-    },
-    {
-      "id": "2025-ref-05",
-      "year": 2025,
-      "region": "高新区",
-      "district": "成都高新区",
-      "school": "高新区公办小学（骨干教师引进）",
-      "school_type": "公办",
-      "subject": "小学数学",
-      "position": "小学数学教师（骨干）",
-      "recruitment_count": "待确认",
-      "requirement": "本科及以上，通常要求教学经验",
-      "announcement_date": "2025年7月-8月（预计）",
-      "deadline": "待确认",
-      "source": "高新区教育文体局",
-      "source_url": "https://cdhrss.chengdu.gov.cn/",
-      "status": "已截止（2025年）",
-      "exam_date": "待确认",
-      "notes": "高新区偶有骨干教师引进计划，对教学经验和学历有较高要求。是否在2025年有此计划需查证。",
-      "data_quality": "推断-高新区曾有类似招聘",
-      "verify_url": "https://cdhrss.chengdu.gov.cn/"
-    },
-    {
-      "id": "2025-ref-06",
-      "year": 2025,
-      "region": "民办",
-      "district": "成都市",
-      "school": "民办学校（嘉祥、金苹果等）",
-      "school_type": "民办",
-      "subject": "小学数学",
-      "position": "小学数学教师",
-      "recruitment_count": "待确认",
-      "requirement": "本科及以上，师范类/硕士优先",
-      "announcement_date": "常年招聘",
-      "deadline": "各校自行安排",
-      "source": "各民办学校官网/招聘平台",
-      "source_url": "",
-      "status": "参考信息",
-      "exam_date": "",
-      "notes": "成都民办学校（嘉祥外国语、金苹果公学、成都外国语学校附属小学等）通常常年招聘，不限固定时间。可关注其官网招聘栏目或智联/51job。",
-      "data_quality": "参考信息-非特定招聘公告",
-      "verify_url": "智联招聘/前程无忧 搜索'成都 小学数学教师'"
-    }
-  ]
+  "jobs": [],
+  "sources": {
+    "官方渠道": [
+      {
+        "name": "成都市人力资源和社会保障局",
+        "url": "https://cdhrss.chengdu.gov.cn/",
+        "说明": "成都市事业单位公开招聘（含教育类）统一发布平台"
+      },
+      {
+        "name": "成都人才网",
+        "url": "https://www.rc114.com/",
+        "说明": "成都市人才服务中心下属招聘平台，含教师岗位"
+      },
+      {
+        "name": "四川省人力资源和社会保障厅",
+        "url": "https://rst.sc.gov.cn/",
+        "说明": "省属事业单位招聘公告"
+      }
+    ],
+    "搜索关键词建议": [
+      "成都 小学数学教师 招聘",
+      "成都市事业单位公开招聘 教育类",
+      "成都高新区 教师招聘",
+      "成都天府新区 教师招聘"
+    ]
+  }
 }

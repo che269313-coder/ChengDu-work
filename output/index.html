@@ -1,894 +1,115 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>成都小学数学教师招聘追踪系统</title>
-    <style>
-/* ===================================================================
-   成都小学数学教师招聘追踪系统 — 样式表
-   =================================================================== */
-
-/* --- Reset & Base --- */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-    --color-primary: #1a73e8;
-    --color-primary-dark: #1557b0;
-    --color-bg: #f8f9fa;
-    --color-surface: #ffffff;
-    --color-text: #202124;
-    --color-text-secondary: #5f6368;
-    --color-border: #dadce0;
-    --color-active: #0d904f;
-    --color-upcoming: #e8a817;
-    --color-closed: #d93025;
-    --color-grad: #7c3aed;
-    --radius: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-    --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-                 "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: var(--color-bg);
-    color: var(--color-text);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-}
-
-.container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
-
-a { color: var(--color-primary); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-/* --- Header --- */
-.header {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    color: #fff;
-    padding: 32px 0 0;
-    box-shadow: var(--shadow-lg);
-}
-
-.header h1 { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
-.header .subtitle { font-size: 14px; opacity: 0.85; margin-bottom: 8px; }
-.header .update-time { font-size: 12px; opacity: 0.7; }
-
-.nav {
-    display: flex;
-    gap: 4px;
-    margin-top: 16px;
-    padding: 0 24px;
-}
-
-.nav a {
-    color: rgba(255,255,255,0.75);
-    padding: 10px 20px;
-    border-radius: 8px 8px 0 0;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s;
-    background: rgba(255,255,255,0.08);
-}
-
-.nav a:hover, .nav a.active {
-    color: #fff;
-    background: rgba(255,255,255,0.18);
-    text-decoration: none;
-}
-
-.nav a.active { background: var(--color-bg); color: var(--color-text); }
-
-/* --- Main --- */
-main { padding: 24px 0 48px; }
-
-/* --- Toolbar --- */
-.toolbar {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    padding: 16px 0;
-    flex-wrap: wrap;
-}
-
-#searchInput {
-    flex: 1;
-    min-width: 280px;
-    padding: 10px 16px;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius);
-    font-size: 15px;
-    transition: border-color 0.2s;
-    outline: none;
-}
-
-#searchInput:focus { border-color: var(--color-primary); }
-
-.filter-buttons { display: flex; gap: 8px; }
-
-.filter-btn {
-    padding: 8px 16px;
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    background: var(--color-surface);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.filter-btn:hover { background: #e8f0fe; border-color: var(--color-primary); }
-.filter-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
-
-/* --- Stats Panel --- */
-.stats-panel {
-    background: var(--color-surface);
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    margin: 16px 0;
-    box-shadow: var(--shadow);
-}
-
-.stats-panel h2 { font-size: 18px; margin-bottom: 16px; }
-
-.stats-panel {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    align-items: flex-start;
-}
-
-.stat-card {
-    background: #f1f3f4;
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    min-width: 160px;
-    text-align: center;
-}
-
-.stat-card.total {
-    background: var(--color-primary);
-    color: #fff;
-}
-
-.stat-card h3 { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; }
-.stat-card.total h3 { color: rgba(255,255,255,0.7); }
-
-.stat-num { font-size: 36px; font-weight: 700; }
-
-.stat-detail { font-size: 12px; color: var(--color-text-secondary); margin-top: 8px; display: flex; flex-direction: column; gap: 2px; }
-.stat-card.total .stat-detail { color: rgba(255,255,255,0.8); }
-
-/* --- Upcoming Section --- */
-.upcoming-section {
-    background: linear-gradient(135deg, #fff8e1, #fff3cd);
-    border: 1px solid #f9d71c;
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    margin: 16px 0;
-}
-
-.upcoming-section h2 { font-size: 18px; margin-bottom: 12px; }
-
-.upcoming-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.upcoming-card {
-    background: #fff;
-    border-radius: 6px;
-    padding: 10px 16px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: var(--shadow);
-}
-
-.date-badge {
-    background: var(--color-upcoming);
-    color: #fff;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-/* --- Year Tabs --- */
-.year-tabs {
-    display: flex;
-    gap: 8px;
-    margin: 20px 0;
-}
-
-.year-tab {
-    padding: 10px 24px;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius);
-    background: var(--color-surface);
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.year-tab:hover { border-color: var(--color-primary); }
-.year-tab.active {
-    background: var(--color-primary);
-    color: #fff;
-    border-color: var(--color-primary);
-}
-
-.year-content h2 { margin: 16px 0 12px; font-size: 22px; }
-
-/* --- Region Section --- */
-.region-section {
-    background: var(--color-surface);
-    border-radius: var(--radius);
-    margin: 16px 0;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-}
-
-.region-title {
-    padding: 14px 20px;
-    background: #e8f0fe;
-    font-size: 16px;
-    border-bottom: 1px solid var(--color-border);
-}
-
-/* --- Table --- */
-.table-wrapper { overflow-x: auto; }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-}
-
-thead { background: #f8f9fa; }
-
-th {
-    padding: 10px 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid var(--color-border);
-    white-space: nowrap;
-}
-
-td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #f1f3f4;
-    vertical-align: top;
-}
-
-tbody tr:hover { background: #f8f9fa; }
-
-td.deadline { color: var(--color-closed); font-weight: 500; }
-td.notes { max-width: 200px; font-size: 12px; color: var(--color-text-secondary); }
-td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
-
-/* --- Badges --- */
-.badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.badge-active   { background: #e6f4ea; color: var(--color-active); }
-.badge-upcoming { background: #fef7e0; color: #9a6d0a; }
-.badge-closed   { background: #fce8e6; color: var(--color-closed); }
-.badge-info     { background: #e8f0fe; color: var(--color-primary); }
-
-/* --- Tags --- */
-.tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    background: #f1f3f4;
-    color: var(--color-text-secondary);
-    margin: 1px 2px;
-}
-
-/* --- Graduate Section --- */
-.grad-intro {
-    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
-    border: 1px solid #c4b5fd;
-    border-radius: var(--radius);
-    padding: 24px;
-    margin: 16px 0;
-}
-
-.grad-intro h2 { font-size: 22px; color: var(--color-grad); margin-bottom: 8px; }
-.grad-intro p { margin: 8px 0; }
-
-.highlight-box {
-    background: #fff;
-    border-left: 4px solid var(--color-grad);
-    padding: 12px 16px;
-    border-radius: 0 8px 8px 0;
-    margin-top: 12px;
-}
-
-.grad-section { margin: 24px 0; }
-.grad-section h3 { margin-bottom: 12px; font-size: 18px; }
-
-/* --- Advice --- */
-.advice-section {
-    background: var(--color-surface);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin: 24px 0;
-    box-shadow: var(--shadow);
-}
-
-.advice-section h3 { font-size: 18px; margin-bottom: 16px; }
-
-.advice-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-}
-
-.advice-card {
-    padding: 16px;
-    background: #f8f9fa;
-    border-radius: var(--radius);
-}
-
-.advice-card h4 { font-size: 14px; margin-bottom: 6px; color: var(--color-primary); }
-.advice-card p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
-
-/* --- Footer --- */
-.footer {
-    background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    padding: 20px 0;
-    text-align: center;
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    margin-top: 32px;
-}
-
-.footer .disclaimer { font-size: 12px; opacity: 0.7; margin-top: 4px; }
-
-/* --- Responsive --- */
-@media (max-width: 768px) {
-    .container { padding: 0 12px; }
-    .header h1 { font-size: 22px; }
-    .toolbar { flex-direction: column; align-items: stretch; }
-    .filter-buttons { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
-    .stat-card { min-width: 120px; }
-    .stat-num { font-size: 24px; }
-    .advice-cards { grid-template-columns: 1fr; }
-}
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成都小学数学教师招聘追踪</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pri:#1a73e8;--bg:#f8f9fa;--surf:#fff;--txt:#202124;--txt2:#5f6368;--bdr:#dadce0;--rd:8px;--sh:0 1px 3px rgba(0,0,0,.08)}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);line-height:1.7}
+.c{max-width:960px;margin:0 auto;padding:0 20px}
+.header{background:linear-gradient(135deg,var(--pri),#1557b0);color:#fff;padding:32px 0 0}
+.header h1{font-size:24px;font-weight:600}.header .sub{font-size:14px;opacity:.85}
+.header .time{font-size:12px;opacity:.7;margin-bottom:16px}
+.nav{display:flex;gap:4px;padding:0 20px}
+.nav a{color:rgba(255,255,255,.75);padding:10px 20px;border-radius:8px 8px 0 0;font-size:14px;text-decoration:none;background:rgba(255,255,255,.08)}
+.nav a:hover,.nav a.active{color:#fff;background:rgba(255,255,255,.18)}.nav a.active{background:var(--bg);color:var(--txt)}
+main{padding:24px 0 48px}
+.card{background:var(--surf);border-radius:var(--rd);padding:24px;margin:16px 0;box-shadow:var(--sh)}
+.card h2{font-size:18px;margin-bottom:12px}
+.card h3{font-size:16px;margin:16px 0 8px}
+.empty{text-align:center;padding:60px 20px;color:var(--txt2)}
+.empty .icon{font-size:48px;margin-bottom:16px}
+.empty h2{font-size:20px;margin-bottom:8px;color:var(--txt)}
+.empty p{font-size:14px;max-width:500px;margin:0 auto;line-height:1.8}
+.src-list{list-style:none}
+.src-list li{padding:12px 16px;border-bottom:1px solid #f1f3f4;display:flex;align-items:flex-start;gap:12px}
+.src-list li:last-child{border-bottom:none}
+.src-list .src-name{font-weight:600;min-width:140px}
+.src-list .src-url{color:var(--pri);word-break:break-all;font-size:13px}
+.src-list .src-note{font-size:13px;color:var(--txt2);margin-top:4px}
+.src-list .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.tag-daily{background:#e6f4ea;color:#0d904f}
+.tag-3d{background:#e8f0fe;color:var(--pri)}
+.tag-weekly{background:#fef7e0;color:#9a6d0a}
+.footer{background:var(--surf);border-top:1px solid var(--bdr);padding:20px 0;text-align:center;font-size:13px;color:var(--txt2)}
+.footer .disc{font-size:12px;opacity:.7;margin-top:4px}
+@media(max-width:640px){.src-list li{flex-direction:column;gap:4px}.src-list .src-name{min-width:auto}}
+</style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <h1>📋 成都小学数学教师招聘追踪系统</h1>
-            <p class="subtitle">覆盖成都市23个区县 · 自动更新 · 每两天同步</p>
-            <p class="update-time">最后更新: 2026-05-29 18:40</p>
-            <nav class="nav">
-                <a href="index.html" class="active">📊 全部招聘</a>
-                <a href="grad.html" >🎓 研究生专区</a>
-                <a href="#stats">📈 数据统计</a>
-                <a href="#upcoming">⏰ 即将开始</a>
-            </nav>
-        </div>
-    </header>
-    <main class="container">
-    <div class="toolbar">
-        <input type="text" id="searchInput" onkeyup="filterTable()"
-               placeholder="🔍 搜索学校名称、区域、岗位...">
-        <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filterStatus('all')">全部</button>
-            <button class="filter-btn" onclick="filterStatus('进行中')">🟢 进行中</button>
-            <button class="filter-btn" onclick="filterStatus('即将开始')">🟡 即将开始</button>
-            <button class="filter-btn" onclick="filterStatus('已截止')">🔴 已截止</button>
-        </div>
-    </div>
-    <div class="stats-panel" id="stats"><h2>📈 数据统计</h2>
-        <div class="stat-card">
-            <h3>2025年</h3>
-            <div class="stat-num">6</div>
-            <div class="stat-detail">
-                <span>🟢 进行中: 0</span>
-                <span>🟡 即将开始: 0</span>
-                <span>🔴 已截止: 5</span>
-            </div>
-        </div>
-        <div class="stat-card">
-            <h3>2026年</h3>
-            <div class="stat-num">7</div>
-            <div class="stat-detail">
-                <span>🟢 进行中: 0</span>
-                <span>🟡 即将开始: 0</span>
-                <span>🔴 已截止: 2</span>
-            </div>
-        </div><div class="stat-card total"><h3>总计</h3><div class="stat-num">13</div></div></div><div class="upcoming-section" id="upcoming"><h2>⏰ 近期即将开始的招聘（重点关注）</h2><div class="upcoming-list"></div></div><div class="year-tabs"><button class="year-tab active" data-year="2026" onclick="switchYear('2026')">2026年</button><button class="year-tab " data-year="2025" onclick="switchYear('2025')">2025年</button></div><div class="year-content" data-year="2026" ><h2>2026年 小学数学教师招聘信息</h2>
-        <div class="region-section">
-            <h3 class="region-title">📍 天府新区 (1个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">天府新区公办小学（单独招聘）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认（往年通常3-5人）</td>
-                            <td>本科及以上，硕士优先</td>
-                            <td>2026年4月前后（预计）</td>
-                            <td class="deadline">2026年4月-5月（预计）</td>
-                            <td>2026年5月前后</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>天府新区社事局</td>
-                            <td class="notes">天府新区通常在成都市统一招聘外单独发布教师招聘公告。2026年具体情况需查证。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 龙泉驿区 (1个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">成都大学附属小学（重点关注）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办（成都大学直属）</td>
-                            <td>待确认</td>
-                            <td>本科及以上，研究生优先</td>
-                            <td>★ 关注龙泉驿区教育局公告</td>
-                            <td class="deadline">★ 待确认</td>
-                            <td>待确认</td>
-                            <td><span class="badge badge-info">★ 待确认是否2026年有岗位</span></td>
-                            <td>龙泉驿区教育局</td>
-                            <td class="notes">【成都大学教育学院研究生重点关注】成都大学附属小学是成都大学直属学校，位于龙泉驿区。本校研究生通过导师推荐可能获得优势。2026年是否有小学数学教师岗位需关注龙泉驿区教育局公告。建议主动联系导师了解内部推荐渠道。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 市统一招聘 (2个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">各区县公办小学（2026年下半年统一招聘）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上</td>
-                            <td>2026年9月中旬（预计）★</td>
-                            <td class="deadline">2026年10月上旬（预计）★</td>
-                            <td>2026年10月-11月（预计）</td>
-                            <td><span class="badge badge-info">★ 预计9月中旬发布公告</span></td>
-                            <td>成都市人社局</td>
-                            <td class="notes">【重要】成都市2026年下半年事业单位公开招聘（教育类）。这是全年第二大招聘窗口。往年9月中旬发布公告，10月下旬笔试。届时成都市人社局官网会发布统一公告，包含各区县教师岗位。密切关注！</td>
-                        </tr>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">各区县公办小学（2026年上半年统一招聘）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上，具有教师资格证</td>
-                            <td>2026年3月中旬（预计）</td>
-                            <td class="deadline">2026年4月上旬（预计）</td>
-                            <td>2026年4月-5月</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>成都市人社局</td>
-                            <td class="notes">已结束。各区县均有小学数学教师岗位。往年中心城区（锦江、青羊、金牛、武侯、成华、高新）岗位较多。具体学校和人数需查阅2026年3月发布的正式公告。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 各区县 (2个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">各区县公办小学（夏季补招/单独招聘）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上</td>
-                            <td>2026年6月-8月（预计）★</td>
-                            <td class="deadline">各区县自行安排 ★</td>
-                            <td>各区县自行安排</td>
-                            <td><span class="badge badge-info">★ 即将进入夏季招聘期（当前5月底）</span></td>
-                            <td>各区县教育局</td>
-                            <td class="notes">【重点关注】当前是5月底，即将进入6-8月夏季补招窗口。往年此阶段郫都区、温江区、新都区、双流区、龙泉驿区等有单独补招。各区县公告发布时间不统一，需分别关注。每天检查以下渠道：各区县教育局官网、成都市人社局官网、成都人才网(rc114.com)。</td>
-                        </tr>
-                        <tr>
-                            <td>各区县公办小学（下半年补录/单独招聘）</td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上</td>
-                            <td>2026年10月-12月</td>
-                            <td class="deadline">各区县自行安排</td>
-                            <td>各区县自行安排</td>
-                            <td><span class="badge badge-info">★ 待确认（年底）</span></td>
-                            <td>各区县教育局</td>
-                            <td class="notes">下半年统一招聘结束后，部分区县可能有补录或单独招聘。往年天府新区、高新区等偶有年底招聘。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 民办 (1个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>成都民办学校：嘉祥、金苹果、成外附小等</td>
-                            <td>小学数学教师</td>
-                            <td>民办</td>
-                            <td>待确认</td>
-                            <td>本科及以上，硕士优先（薪资更高）</td>
-                            <td>常年招聘</td>
-                            <td class="deadline">各校自行安排</td>
-                            <td></td>
-                            <td><span class="badge badge-info">★ 需自行搜索</span></td>
-                            <td>各民办学校官网/智联/51job</td>
-                            <td class="notes">成都民办学校通常没有固定招聘季，全年滚动招聘。建议在智联招聘(zhaopin.com)和前程无忧(51job.com)搜索'成都 小学数学教师'，设置关键词提醒。民办学校薪资通常高于公办（10K-25K/月），对硕士学历认可度高。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div></div><div class="year-content" data-year="2025" style="display:none"><h2>2025年 小学数学教师招聘信息</h2>
-        <div class="region-section">
-            <h3 class="region-title">📍 高新区 (1个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">高新区公办小学（骨干教师引进）</a></td>
-                            <td>小学数学教师（骨干）</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上，通常要求教学经验</td>
-                            <td>2025年7月-8月（预计）</td>
-                            <td class="deadline">待确认</td>
-                            <td>待确认</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>高新区教育文体局</td>
-                            <td class="notes">高新区偶有骨干教师引进计划，对教学经验和学历有较高要求。是否在2025年有此计划需查证。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 天府新区 (1个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">天府新区各公办小学（单独招聘）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上，35周岁以下</td>
-                            <td>2025年3月-4月（预计）</td>
-                            <td class="deadline">2025年4月-5月（预计）</td>
-                            <td>2025年5月（预计）</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>天府新区社事局</td>
-                            <td class="notes">天府新区通常在统一招聘外单独组织教师招聘，岗位数较多。2025年具体情况需查当年公告。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 市统一招聘 (2个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">各区县公办小学（统一招聘）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上</td>
-                            <td>2025年9月（预计）</td>
-                            <td class="deadline">2025年10月（预计）</td>
-                            <td>2025年10月-11月（预计）</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>成都市人社局</td>
-                            <td class="notes">成都市2025年下半年事业单位公开招聘（教育类）。下半年岗位数通常少于上半年。</td>
-                        </tr>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">各区县公办小学（统一招聘）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上，具有教师资格证</td>
-                            <td>2025年3月（预计）</td>
-                            <td class="deadline">2025年4月（预计）</td>
-                            <td>2025年4月-5月（预计）</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>成都市人社局</td>
-                            <td class="notes">成都市2025年上半年事业单位公开招聘（教育类）。各区县均有小学数学教师岗位放出，具体学校及人数以当年公告为准。往年参考：高新区、天府新区、锦江区、青羊区等中心城区通常岗位较多。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 各区县 (1个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://cdhrss.chengdu.gov.cn/" target="_blank">各区县公办小学（夏季补招）</a></td>
-                            <td>小学数学教师</td>
-                            <td>公办</td>
-                            <td>待确认</td>
-                            <td>本科及以上</td>
-                            <td>2025年6月-8月</td>
-                            <td class="deadline">2025年7月-8月</td>
-                            <td>各区县自行安排</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>各区县教育局</td>
-                            <td class="notes">2025年夏季各区县可能有单独补招，需分别关注各区县教育局公告。往年温江区、郫都区、新都区等夏季补招较常见。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="region-section">
-            <h3 class="region-title">📍 民办 (1个岗位)</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学校名称</th>
-                            <th>岗位</th>
-                            <th>类型</th>
-                            <th>人数</th>
-                            <th>学历要求</th>
-                            <th>发布日期</th>
-                            <th>截止日期</th>
-                            <th>考试日期</th>
-                            <th>状态</th>
-                            <th>来源</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>民办学校（嘉祥、金苹果等）</td>
-                            <td>小学数学教师</td>
-                            <td>民办</td>
-                            <td>待确认</td>
-                            <td>本科及以上，师范类/硕士优先</td>
-                            <td>常年招聘</td>
-                            <td class="deadline">各校自行安排</td>
-                            <td></td>
-                            <td><span class="badge badge-info">参考信息</span></td>
-                            <td>各民办学校官网/招聘平台</td>
-                            <td class="notes">成都民办学校（嘉祥外国语、金苹果公学、成都外国语学校附属小学等）通常常年招聘，不限固定时间。可关注其官网招聘栏目或智联/51job。</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div></div>    </main>
-    <footer class="footer">
-        <div class="container">
-            <p>成都小学数学教师招聘追踪系统 · 自动更新于 2026-05-29 18:40</p>
-            <p class="disclaimer">⚠️ 数据来源于公开渠道，仅供参考，请以官方公告为准。</p>
-        </div>
-    </footer>
-    <script>
+<header class="header">
+<div class="c">
+<h1>📋 成都小学数学教师招聘追踪</h1>
+<p class="sub">自动追踪 · 每两天更新</p>
+<p class="time">最后更新: 2026-05-29</p>
+</div>
+<nav class="nav">
+<a href="index.html" class="active">📊 全部招聘</a>
+<a href="grad.html">🎓 研究生专区</a>
+</nav>
+</header>
+<main class="c">
 
-// 搜索过滤
-function filterTable() {{
-    const input = document.getElementById('searchInput');
-    const filter = input.value.toUpperCase();
-    const sections = document.querySelectorAll('.region-section');
+<div class="card empty">
+<div class="icon">📭</div>
+<h2>暂无已核实的招聘数据</h2>
+<p>截至2026年5月29日，尚未通过官方渠道获取到可验证的成都小学数学教师招聘公告。以下为已知的官方信息获取渠道，供你自行查阅。</p>
+</div>
 
-    sections.forEach(section => {{
-        const rows = section.querySelectorAll('tbody tr');
-        let visible = 0;
-        rows.forEach(row => {{
-            const text = row.textContent.toUpperCase();
-            if (text.indexOf(filter) > -1) {{
-                row.style.display = '';
-                visible++;
-            }} else {{
-                row.style.display = 'none';
-            }}
-        }});
-        section.style.display = visible > 0 ? '' : 'none';
-    }});
-}}
+<div class="card">
+<h2>🔗 官方信息渠道（按优先级排列）</h2>
 
-// 年份切换
-function switchYear(year) {{
-    document.querySelectorAll('.year-tab').forEach(tab => {{
-        tab.classList.remove('active');
-        if (tab.dataset.year === year) tab.classList.add('active');
-    }});
-    document.querySelectorAll('.year-content').forEach(content => {{
-        content.style.display = content.dataset.year === year ? '' : 'none';
-    }});
-}}
+<h3>每日检查</h3>
+<ul class="src-list">
+<li>
+<span class="src-name">成都市人社局</span>
+<div><a class="src-url" href="https://cdhrss.chengdu.gov.cn/" target="_blank">cdhrss.chengdu.gov.cn</a>
+<div class="src-note">成都市事业单位公开招聘（含教育类）统一发布平台。所有公办教师岗位的唯一官方来源。<span class="tag tag-daily">每天</span></div></div>
+</li>
+<li>
+<span class="src-name">成都人才网</span>
+<div><a class="src-url" href="https://www.rc114.com/" target="_blank">rc114.com</a>
+<div class="src-note">各区县单独招聘、民办学校招聘均可能在此发布。搜索"小学数学教师"。<span class="tag tag-daily">每天</span></div></div>
+</li>
+</ul>
 
-// 状态筛选
-function filterStatus(status) {{
-    const rows = document.querySelectorAll('tbody tr');
-    rows.forEach(row => {{
-        const badge = row.querySelector('.badge');
-        if (!badge) return;
-        if (status === 'all' || badge.textContent.includes(status)) {{
-            row.style.display = '';
-        }} else {{
-            row.style.display = 'none';
-        }}
-    }});
-    // 隐藏空的section
-    document.querySelectorAll('.region-section').forEach(section => {{
-        const visible = section.querySelectorAll('tbody tr[style=""]').length;
-        section.style.display = visible > 0 ? '' : 'none';
-    }});
-}}
+<h3>每2-3天检查</h3>
+<ul class="src-list">
+<li>
+<span class="src-name">四川省人社厅</span>
+<div><a class="src-url" href="https://rst.sc.gov.cn/" target="_blank">rst.sc.gov.cn</a>
+<div class="src-note">省属学校教师岗位发布渠道。<span class="tag tag-3d">每3天</span></div></div>
+</li>
+<li>
+<span class="src-name">智联招聘</span>
+<div><a class="src-url" href="https://www.zhaopin.com/" target="_blank">zhaopin.com</a>
+<div class="src-note">搜索"成都 小学数学教师"。民办学校和培训机构岗位。<span class="tag tag-3d">每2天</span></div></div>
+</li>
+<li>
+<span class="src-name">前程无忧</span>
+<div><a class="src-url" href="https://www.51job.com/" target="_blank">51job.com</a>
+<div class="src-note">搜索"成都 小学数学教师"。民办学校和培训机构岗位。<span class="tag tag-3d">每2天</span></div></div>
+</li>
+</ul>
 
-    </script>
+<h3>每周检查</h3>
+<ul class="src-list">
+<li>
+<span class="src-name">龙泉驿区教育局</span>
+<div><a class="src-url" href="http://www.longquanyi.gov.cn/" target="_blank">longquanyi.gov.cn</a>
+<div class="src-note">成都大学附属小学所在区县，本校研究生重点关注。<span class="tag tag-weekly">每周</span></div></div>
+</li>
+</ul>
+</div>
+
+</main>
+<footer class="footer">
+<div class="c">
+<p>成都小学数学教师招聘追踪系统 · 自动更新于 2026-05-29</p>
+<p class="disc">⚠️ 本页面仅展示已通过官方渠道验证的招聘信息。没有就是没有，不会伪造数据。</p>
+</div>
+</footer>
 </body>
 </html>
