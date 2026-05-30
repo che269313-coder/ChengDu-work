@@ -300,6 +300,27 @@ class BaseScraper:
                 time.sleep(random.uniform(2, 5) * (attempt + 1))
         return None
 
+    def fetch_post(self, url: str, data: dict = None, json: dict = None,
+                   referer: str = None, **kwargs) -> requests.Response | None:
+        """POST请求（用于高校就业网等需要POST的API），同样遵循君子协定"""
+        self._randomize_headers()
+        time.sleep(random.uniform(1.2, 3.8))
+        
+        headers = {}
+        if referer:
+            headers["Referer"] = referer
+        
+        try:
+            resp = self.session.post(
+                url, data=data, json=json,
+                timeout=self.timeout, headers=headers, **kwargs
+            )
+            resp.raise_for_status()
+            return resp
+        except requests.RequestException as e:
+            logger.error(f"POST请求失败: {url} - {e}")
+            return None
+
     def fetch_gov_site(self, url: str) -> requests.Response | None:
         """专门用于.gov.cn网站的抓取：先访问首页建立会话"""
         from urllib.parse import urlparse
@@ -779,6 +800,40 @@ class JiaoshiAPIScraper(BaseScraper):
         return self.results
 
 
+class CduJobScraper(BaseScraper):
+    """
+    成都大学就业信息网 (jy.cdu.edu.cn) — ✅ HTTP 200，无WAF
+    
+    数据通过 POST /Article/getlist 获取，需 school_id/cate_id 参数。
+    建议在浏览器中打开网站确认分类ID后填入。
+    """
+    
+    NAME = "cdu_job"
+    BASE_URL = "https://jy.cdu.edu.cn"
+    
+    def run(self) -> list[dict]:
+        logger.info("[cdu_job] 网站可访问，数据需POST API (fetch_post已就绪)")
+        logger.info("[cdu_job] TODO: 需在浏览器确认 school_id 和'教师招聘'分类的 cate_id")
+        return self.results
+
+
+class SicnuJobScraper(BaseScraper):
+    """
+    四川师范大学就业信息网 (jy.sicnu.edu.cn) — ✅ HTTP 200
+    
+    首页已确认有"教师公招""事业单位""选调生""特岗教师"等栏目。
+    详情列表可能需登录。建议直接浏览器访问搜索'小学数学'。
+    """
+    
+    NAME = "sicnu_job"
+    BASE_URL = "https://jy.sicnu.edu.cn"
+    
+    def run(self) -> list[dict]:
+        logger.info("[sicnu_job] 网站可访问，首页有'教师公招'栏目")
+        logger.info("[sicnu_job] 建议浏览器: https://jy.sicnu.edu.cn 搜索'小学数学'")
+        return self.results
+
+
 # ---------------------------------------------------------------------------
 # 主流程
 # ---------------------------------------------------------------------------
@@ -791,6 +846,8 @@ SCRAPERS = {
     "job51": Job51Scraper,
     "scpta": SCPTAScraper,
     "jiaoshi_api": JiaoshiAPIScraper,
+    "cdu_job": CduJobScraper,
+    "sicnu_job": SicnuJobScraper,
 }
 
 
