@@ -819,18 +819,74 @@ class CduJobScraper(BaseScraper):
 
 class SicnuJobScraper(BaseScraper):
     """
-    四川师范大学就业信息网 (jy.sicnu.edu.cn) — ✅ HTTP 200
+    四川师范大学就业信息网 (jy.sicnu.edu.cn) — ✅ 已验证可用
     
-    首页已确认有"教师公招""事业单位""选调生""特岗教师"等栏目。
-    详情列表可能需登录。建议直接浏览器访问搜索'小学数学'。
+    关键发现: /home/electionJob?corpPartId=数字 不需要登录直接返回招聘详情！
+    包含: 单位名称、地址、联系人、手机、邮箱、行业、规模
+    
+    corpPartId 范围约 3700-3900，可遍历获取所有招聘单位。
+    单位名称含"小学"且地址含"成都"即为目标岗位。
     """
     
     NAME = "sicnu_job"
     BASE_URL = "https://jy.sicnu.edu.cn"
     
     def run(self) -> list[dict]:
-        logger.info("[sicnu_job] 网站可访问，首页有'教师公招'栏目")
-        logger.info("[sicnu_job] 建议浏览器: https://jy.sicnu.edu.cn 搜索'小学数学'")
+        logger.info("[sicnu_job] 遍历川师大就业网招聘详情页...")
+        
+        # corpPartId 范围（从已验证的ID范围推断）
+        for cid in range(3700, 3920):
+            url = f"{self.BASE_URL}/home/electionJob?corpPartId={cid}"
+            resp = self.fetch(url, referer=f"{self.BASE_URL}/")
+            if not resp or resp.status_code != 200:
+                continue
+            
+            soup = BeautifulSoup(resp.content, "lxml")
+            text = soup.get_text()
+            
+            # 检查是否为成都的小学相关岗位
+            if "成都" not in text:
+                continue
+            if "小学" not in text and "学校" not in text:
+                continue
+            
+            # 提取关键字段
+            import re
+            name_match = re.search(r'单位名称\s*[：:]\s*(.+?)(?:\s|$)', text)
+            addr_match = re.search(r'地址\s*[：:]\s*(.+?)(?:\s|$)', text)
+            contact_match = re.search(r'联系人\s*[：:]\s*(.+?)(?:\s|$)', text)
+            phone_match = re.search(r'手机号码\s*[：:]\s*(\d+)', text)
+            email_match = re.search(r'邮箱\s*[：:]\s*([\w.@]+)', text)
+            industry_match = re.search(r'行业\s*[：:]\s*(.+?)(?:\s|$)', text)
+            
+            name = name_match.group(1).strip() if name_match else ""
+            
+            job = {
+                "id": f"sicnu-{cid}",
+                "year": datetime.now().year,
+                "region": detect_region(text, self.config),
+                "district": "",
+                "school": name,
+                "school_type": industry_match.group(1).strip() if industry_match else "",
+                "subject": "小学数学" if "小学" in text else "",
+                "position": "教师（招聘详情见网页）",
+                "recruitment_count": 0,
+                "requirement": "",
+                "announcement_date": "",
+                "deadline": "",
+                "source": "四川师范大学就业信息网",
+                "source_url": url,
+                "status": "进行中",
+                "exam_date": "",
+                "notes": f"联系人: {contact_match.group(1).strip() if contact_match else ''} "
+                        f"手机: {phone_match.group(1) if phone_match else ''} "
+                        f"邮箱: {email_match.group(1) if email_match else ''} "
+                        f"地址: {addr_match.group(1).strip() if addr_match else ''}",
+            }
+            self.results.append(job)
+            logger.info(f"[sicnu_job] 发现: {name} (ID={cid})")
+        
+        logger.info(f"[sicnu_job] 共发现 {len(self.results)} 个成都相关岗位")
         return self.results
 
 
