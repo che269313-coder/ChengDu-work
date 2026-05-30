@@ -162,18 +162,39 @@ class BaseScraper:
     - 对rc114.com：ASP.NET WebForms，搜索可能需PostBack
     """
 
-    # 模拟Chrome 125在Windows上的真实请求头
-    BROWSER_HEADERS = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/125.0.0.0 Safari/537.36"
-        ),
+    # User-Agent 池（Chrome/Edge/Firefox 的常见版本，Windows/Mac）
+    UA_POOL = [
+        # Chrome 125-131 on Windows 10/11
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        # Edge on Windows
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+        # Firefox on Windows
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0",
+        # Chrome on macOS
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+        # Safari on macOS
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15",
+    ]
+    
+    # Language 池（增加多样性）
+    LANG_POOL = [
+        "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+        "zh-CN,zh;q=0.9,en;q=0.8",
+        "zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4",
+    ]
+
+    # 基础请求头模板（UA和Language在每次请求时随机轮换）
+    BASE_HEADERS = {
         "Accept": (
             "text/html,application/xhtml+xml,application/xml;"
             "q=0.9,image/webp,image/apng,*/*;q=0.8"
         ),
-        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
         "Accept-Encoding": "gzip, deflate, br",
         "Cache-Control": "max-age=0",
         "Connection": "keep-alive",
@@ -189,8 +210,18 @@ class BaseScraper:
         self.config = config
         self.timeout = timeout
         self.session = requests.Session()
-        self.session.headers.update(self.BROWSER_HEADERS)
+        self.session.headers.update(self.BASE_HEADERS)
+        self._randomize_headers()
         self.results: list[dict] = []
+    
+    def _randomize_headers(self):
+        """每次请求前随机轮换 UA 和 Accept-Language，让请求看起来来自不同浏览器"""
+        ua = random.choice(self.UA_POOL)
+        lang = random.choice(self.LANG_POOL)
+        self.session.headers.update({
+            "User-Agent": ua,
+            "Accept-Language": lang,
+        })
 
     def fetch(self, url: str, referer: str = None, **kwargs) -> requests.Response | None:
         """安全抓取，带重试和Referer
@@ -205,7 +236,9 @@ class BaseScraper:
             headers["Referer"] = referer
 
         for attempt in range(3):
-            # 请求前随机延迟（首次也延迟，模拟用户打开网页的间隔）
+            # 每次请求轮换 UA 和 Accept-Language
+            self._randomize_headers()
+            # 随机延迟，模拟真实用户浏览速度
             delay = random.uniform(1.2, 3.8)
             logger.debug(f"延迟 {delay:.1f}s 后请求...")
             time.sleep(delay)
