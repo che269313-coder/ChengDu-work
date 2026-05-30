@@ -53,12 +53,22 @@ cdu_teacher_jobs/
 
 ## 数据源
 
-| 来源 | 类型 | 说明 |
-|------|------|------|
-| 成都市人社局 | 事业单位公开招聘 | 含教育类岗位统一招聘 |
-| 成都人才网 (rc114.com) | 综合招聘平台 | 各区县教师岗位 |
-| 四川省人事考试网 | 省级统考 | 省属学校教师招聘 |
-| 智联招聘 / 前程无忧 | 商业招聘平台 | 民办学校、培训机构岗位 |
+| 来源 | 状态 | 类型 | 说明 |
+|------|:--:|------|------|
+| 教师人才网 API | ✅ 可用 | RESTful JSON | `jiaoshi.com.cn/api/jobs?location=成都` |
+| 成都市人社局 | ⚠️ 受限 | 事业单位公招 | 云WAF(412)，需浏览器手动访问 |
+| 成都人才网 | ⚠️ 受限 | 综合招聘 | 首页可访问，搜索靠PostBack |
+| 智联/前程无忧 | 📋 待接入 | 商业招聘 | 可能需JS渲染 |
+
+### 进阶：JS渲染页面抓取
+
+对SPA或动态加载的网页，需要浏览器自动化：
+
+```bash
+pip install playwright && playwright install chromium   # 推荐
+# 或: pip install selenium                              # 传统方案
+# Cloudflare等专业WAF: docker run flaresolverr/flaresolverr
+```
 
 ## 成都教师招聘周期
 

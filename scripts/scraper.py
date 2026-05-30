@@ -10,20 +10,27 @@
   4. 支持增量更新，避免重复数据
 
 数据源:
-  - 成都市人社局 (cdhrss.chengdu.gov.cn)
-  - 成都人才网 (rc114.com)
-  - 四川省人社厅 (rst.sc.gov.cn)
-  - 智联招聘 (zhaopin.com)
-  - 前程无忧 (51job.com)
+  ✅ 已验证可用:
+    - 教师人才网 API (jiaoshi.com.cn/api/jobs) — RESTful JSON接口，无需认证
+  ⚠️ 受限（需浏览器自动化 / 网站改版）:
+    - 成都市人社局 (cdhrss.chengdu.gov.cn) — 云WAF(412) + 可能需JS渲染
+    - 成都人才网 (rc114.com) — ASP.NET WebForms, 搜索靠PostBack
+  📋 计划中:
+    - 智联招聘 / 前程无忧 — 可能需JS渲染
 
 运行方式:
   python scraper.py                    # 抓取所有源
-  python scraper.py --source rc114     # 只抓取指定源
+  python scraper.py --source jiaoshi_api  # 只抓取已验证的API源
   python scraper.py --year 2026        # 只抓取指定年份
   python scraper.py --dry-run          # 试运行（不写入文件）
 
-依赖:
+基础依赖:
   pip install requests beautifulsoup4 lxml
+
+进阶依赖（如需抓取JS渲染页面）:
+  pip install playwright && playwright install chromium
+  # 或: pip install selenium
+  # 对Cloudflare等专业防护: FlareSolverr (Docker)
 """
 
 import os
