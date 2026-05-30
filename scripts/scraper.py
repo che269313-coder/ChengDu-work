@@ -230,12 +230,33 @@ class BaseScraper:
             "Accept-Language": lang,
         })
 
+    # 验证码检测关键词（中文常见验证码页面特征）
+    CAPTCHA_SIGNALS = [
+        "请输入验证码", "验证码", "captcha", "滑块验证",
+        "人机验证", "安全验证", "请完成以下验证",
+        "geetest", "recaptcha", "hcaptcha",
+        "访问验证", "请稍后再试", "请求过于频繁",
+        "频繁访问", "IP已被限制",
+    ]
+
+    def _detect_captcha(self, resp: requests.Response) -> bool:
+        """检测响应是否为验证码页面"""
+        text = resp.text[:5000].lower()
+        for signal in self.CAPTCHA_SIGNALS:
+            if signal.lower() in text:
+                return True
+        # 空响应体 + 异常状态码也可能是WAF/验证码
+        if len(resp.text.strip()) < 100 and resp.status_code in (403, 429, 503):
+            return True
+        return False
+
     def fetch(self, url: str, referer: str = None, **kwargs) -> requests.Response | None:
         """安全抓取，带重试和Referer
         
         遵循君子协定：
         - 随机延迟 1.2~3.8 秒，模拟真实用户浏览速度
         - 遇到412立即停止（WAF拦截，重试无意义）
+        - 遇到验证码暂停更久并跳过该源
         - 最多重试3次，退避递增
         """
         headers = {}
@@ -261,6 +282,16 @@ class BaseScraper:
                         f"该网站使用了云防护，可能需要浏览器手动访问"
                     )
                     return None
+                
+                # 验证码检测：遇到了就暂停更久，跳过不纠缠
+                if self._detect_captcha(resp):
+                    logger.warning(
+                        f"⚠️ 检测到验证码页面: {url} — "
+                        f"暂停60秒后跳过该源。建议降低频率或切换到第三方平台。"
+                    )
+                    time.sleep(60)
+                    return None
+                
                 resp.raise_for_status()
                 return resp
             except requests.RequestException as e:
