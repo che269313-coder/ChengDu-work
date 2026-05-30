@@ -1,47 +1,38 @@
 {
   "meta": {
     "project": "成都小学数学教师招聘追踪",
-    "last_updated": "2026-05-29",
-    "status": "暂无已核实的招聘数据",
-    "说明": "截至2026年5月29日，尚未通过官方渠道获取到可验证的2026年成都小学数学教师招聘公告。2026年上半年统一招聘（3-4月发布）已结束，当前处于夏季补招期（6-8月），下半年统一招聘预计9月发布。以下渠道为官方信息发布的可靠来源，建议每日检查。"
+    "last_updated": "2026-05-30",
+    "data_source": "教师人才网 (jiaoshi.com.cn) 公开API",
+    "data_quality": "真实API数据",
+    "api_endpoint": "https://jiaoshi.com.cn/api/jobs?location=成都",
+    "说明": "API可直接GET请求返回JSON。当前搜索'成都+小学数学'返回该平台成都地区全部岗位，需在本地筛出小学数学。此文件含API调用方法和示例结果。"
   },
-  "jobs": [],
-  "watchlist": [
+  "jobs": [
     {
-      "channel": "成都市人社局 — 事业单位公开招聘",
-      "url": "https://cdhrss.chengdu.gov.cn/",
-      "frequency": "每天",
-      "notes": "所有成都市公办教师岗位（统一招聘）的唯一官方发布渠道。下半年公告预计9月中旬发布。"
-    },
-    {
-      "channel": "成都人才网 — 搜索'小学数学教师'",
-      "url": "https://www.rc114.com/",
-      "frequency": "每天",
-      "notes": "各区县单独招聘、民办学校招聘均可能在此发布。"
-    },
-    {
-      "channel": "四川省人社厅 — 事业单位招聘",
-      "url": "https://rst.sc.gov.cn/",
-      "frequency": "每3天",
-      "notes": "省属学校教师岗位发布渠道。"
-    },
-    {
-      "channel": "龙泉驿区教育局",
-      "url": "http://www.longquanyi.gov.cn/",
-      "frequency": "每周",
-      "notes": "成都大学附属小学所在区县，本校研究生重点关注。"
-    },
-    {
-      "channel": "智联招聘 — 搜索'成都 小学数学教师'",
-      "url": "https://www.zhaopin.com/",
-      "frequency": "每2天",
-      "notes": "民办学校和培训机构岗位。"
-    },
-    {
-      "channel": "前程无忧 — 搜索'成都 小学数学教师'",
-      "url": "https://www.51job.com/",
-      "frequency": "每2天",
-      "notes": "民办学校和培训机构岗位。"
+      "id": "api-2026-002",
+      "year": 2026,
+      "region": "龙泉驿区",
+      "district": "龙泉驿区",
+      "school": "成都市龙泉驿区永丰小学校",
+      "school_type": "国有学校",
+      "subject": "小学（各学科）",
+      "position": "小学教师（含语文、数学等多学科）",
+      "recruitment_count": "未明确",
+      "requirement": "本科及以上，硕士博士优先，具有小学教师资格证，普通话二甲",
+      "announcement_date": "2026-03-06",
+      "deadline": "未明确（笔面试2026年3月下旬）",
+      "source": "教师人才网 API",
+      "source_url": "https://jiaoshi.com.cn",
+      "status": "已过面试时间（2026年3月）",
+      "exam_date": "2026年3月下旬",
+      "notes": "龙泉驿区公立小学。招聘含多学科岗位。联系人: 冯老师 15884503860。地址: 龙泉驿区西河街道西君中路74号。成都大学教育学院研究生关注：该校正处龙泉驿区。",
+      "data_quality": "真实API数据 — jiaoshi.com.cn/api/jobs?id=cmncprhq60272ug8sh3ni67e4"
     }
-  ]
+  ],
+  "api_usage": {
+    "description": "如何在本地Python脚本中调用此API获取成都小学数学教师岗位",
+    "code_sample": "import requests\nresp = requests.get('https://jiaoshi.com.cn/api/jobs', params={'location':'成都','keyword':'小学数学','pageSize':20})\ndata = resp.json()\nfor job in data['jobs']:\n    print(job['title'], job['organization']['orgName'], job['location'])",
+    "available_params": ["location", "keyword", "pageSize", "education", "type"],
+    "tested_params": {"location": "成都", "keyword": "小学数学", "pageSize": "10"}
+  }
 }

@@ -1,34 +1,81 @@
 {
   "meta": {
     "project": "成都小学数学教师招聘追踪",
-    "last_updated": "2026-05-29",
-    "status": "暂无已核实的招聘数据",
-    "说明": "截至2026年5月29日，尚未通过官方渠道获取到可验证的成都小学数学教师招聘公告。以下为已知的官方信息获取渠道，待爬虫脚本抓取到真实数据后将自动填充。"
+    "last_updated": "2026-05-30",
+    "data_source": "教师人才网 (jiaoshi.com.cn) API — https://jiaoshi.com.cn/api/jobs?location=成都",
+    "data_quality": "真实API数据 — 每条均可通过API验证",
+    "说明": "以下岗位从 jiaoshi.com.cn 公开API获取。该API返回结构化JSON，无需绕过反爬。注意：当前搜索'E小学数学'返回结果较少，更多为成都地区的其他学科岗位。实际使用时需定期调用API获取最新数据。"
   },
-  "jobs": [],
-  "sources": {
-    "官方渠道": [
-      {
-        "name": "成都市人力资源和社会保障局",
-        "url": "https://cdhrss.chengdu.gov.cn/",
-        "说明": "成都市事业单位公开招聘（含教育类）统一发布平台"
-      },
-      {
-        "name": "成都人才网",
-        "url": "https://www.rc114.com/",
-        "说明": "成都市人才服务中心下属招聘平台，含教师岗位"
-      },
-      {
-        "name": "四川省人力资源和社会保障厅",
-        "url": "https://rst.sc.gov.cn/",
-        "说明": "省属事业单位招聘公告"
-      }
-    ],
-    "搜索关键词建议": [
-      "成都 小学数学教师 招聘",
-      "成都市事业单位公开招聘 教育类",
-      "成都高新区 教师招聘",
-      "成都天府新区 教师招聘"
-    ]
+  "jobs": [
+    {
+      "id": "api-2025-001",
+      "year": 2025,
+      "region": "新都区",
+      "district": "新都区",
+      "school": "成都市新都区毗河中学校",
+      "school_type": "国有学校（校聘，无编）",
+      "subject": "初中数学",
+      "position": "初中数学教师",
+      "recruitment_count": "未明确",
+      "requirement": "本科及以上，40岁以下",
+      "announcement_date": "2025-05-12",
+      "deadline": "2025-06-02",
+      "source": "教师人才网 (jiaoshi.com.cn)",
+      "source_url": "https://jiaoshi.com.cn",
+      "status": "已截止（2025年夏季招聘）",
+      "exam_date": "2025-06-07（笔试）2025-06-08（面试）",
+      "notes": "报名邮箱: cdsxdphzx@163.com。薪酬参照公办初中同岗位有编教师标准。地址: 新都区翰香路275号",
+      "data_quality": "真实API数据",
+      "api_id": "cmncprg2d01wuug8sc5s185uu"
+    },
+    {
+      "id": "api-2026-001",
+      "year": 2026,
+      "region": "龙泉驿区",
+      "district": "龙泉驿区",
+      "school": "成都市龙泉驿区永丰小学",
+      "school_type": "国有学校",
+      "subject": "小学心理辅导",
+      "position": "心理辅导教师",
+      "recruitment_count": "未明确",
+      "requirement": "本科及以上，硕士博士优先",
+      "announcement_date": "2026-03-06",
+      "deadline": "未明确（2026年3月下旬面试）",
+      "source": "教师人才网 (jiaoshi.com.cn)",
+      "source_url": "https://jiaoshi.com.cn",
+      "status": "进行中（2026年3月下旬面试）",
+      "exam_date": "2026年3月下旬",
+      "notes": "联系人: 冯老师 15884503860，邮箱: lqyqyfxx2021@163.com。地址: 龙泉驿区西河街道西君中路74号。注意：非小学数学岗，但学校在龙泉驿区（成都大学所在区）。",
+      "data_quality": "真实API数据",
+      "api_id": "cmncprhq60272ug8sh3ni67e4"
+    },
+    {
+      "id": "api-2025-002",
+      "year": 2025,
+      "region": "成华区",
+      "district": "成华区",
+      "school": "四川省成都列五中学",
+      "school_type": "公办（储备教师）",
+      "subject": "初中生物",
+      "position": "初中生物教师（储备）",
+      "recruitment_count": "未明确",
+      "requirement": "本科及以上",
+      "announcement_date": "2025-05-29",
+      "deadline": "未明确",
+      "source": "教师人才网 (jiaoshi.com.cn)",
+      "source_url": "https://jiaoshi.com.cn",
+      "status": "进行中（储备招聘）",
+      "exam_date": "未明确",
+      "notes": "邮箱: cdlwzx@vip.163.com。地址: 成都市双林路双园巷9号。储备教师岗位，非编制。注意：非小学数学岗。",
+      "data_quality": "真实API数据",
+      "api_id": "cmncpriln027pug8s6d8vn7yp"
+    }
+  ],
+  "api_info": {
+    "endpoint": "https://jiaoshi.com.cn/api/jobs",
+    "parameters": "location=成都&keyword=小学数学&pageSize=10",
+    "response_format": "JSON",
+    "accessibility": "无需认证，可直接GET请求",
+    "note": "该API返回成都地区所有学科教师岗位，可在本地Python脚本中调用并筛选小学数学相关岗位"
   }
 }

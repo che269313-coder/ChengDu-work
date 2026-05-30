@@ -622,6 +622,79 @@ class SCPTAScraper(BaseScraper):
         return self.results
 
 
+class JiaoshiAPIScraper(BaseScraper):
+    """
+    教师人才网 API — 已确认可用的真实数据源
+    
+    API: https://jiaoshi.com.cn/api/jobs
+    参数: location=成都&keyword=小学数学&pageSize=20
+    返回: JSON，无需认证，可直接GET
+    
+    这是目前唯一确认可用的自动化数据源。
+    """
+    
+    NAME = "jiaoshi_api"
+    API_URL = "https://jiaoshi.com.cn/api/jobs"
+    
+    def run(self) -> list[dict]:
+        logger.info("[jiaoshi_api] 开始调用教师人才网API...")
+        
+        params = {
+            "location": "成都",
+            "keyword": "小学数学",
+            "pageSize": 20,
+        }
+        
+        try:
+            resp = self.session.get(self.API_URL, params=params, timeout=self.timeout)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as e:
+            logger.error(f"[jiaoshi_api] API请求失败: {e}")
+            return self.results
+        
+        jobs = data.get("jobs", [])
+        logger.info(f"[jiaoshi_api] API返回 {len(jobs)} 个岗位")
+        
+        for item in jobs:
+            org = item.get("organization", {})
+            org_name = org.get("orgName", "")
+            org_location = org.get("location", "")
+            title = item.get("title", "")
+            
+            # 筛选小学数学相关
+            if not ("数学" in title or "小学" in title):
+                continue
+            
+            region = detect_region(org_location + org_name, self.config)
+            created = item.get("createdAt", "")[:10] if item.get("createdAt") else ""
+            
+            job = {
+                "id": f"api-{item.get('id', '')[:12]}",
+                "year": int(created[:4]) if created else datetime.now().year,
+                "region": region,
+                "district": region,
+                "school": org_name,
+                "school_type": org.get("schoolType", ""),
+                "subject": "小学数学",
+                "position": title,
+                "recruitment_count": 0,
+                "requirement": item.get("education", ""),
+                "announcement_date": created,
+                "deadline": "",
+                "source": "教师人才网 API",
+                "source_url": "https://jiaoshi.com.cn",
+                "status": "进行中" if item.get("status") == "PUBLISHED" else "已截止",
+                "exam_date": "",
+                "notes": f"薪资: {item.get('salaryRange', '面议')}",
+            }
+            self.results.append(job)
+            logger.info(f"[jiaoshi_api] 发现: {title} @ {org_name}")
+        
+        logger.info(f"[jiaoshi_api] 筛选后 {len(self.results)} 个相关岗位")
+        return self.results
+
+
 # ---------------------------------------------------------------------------
 # 主流程
 # ---------------------------------------------------------------------------
@@ -633,6 +706,7 @@ SCRAPERS = {
     "zhaopin": ZhaopinScraper,
     "job51": Job51Scraper,
     "scpta": SCPTAScraper,
+    "jiaoshi_api": JiaoshiAPIScraper,
 }
 
 
