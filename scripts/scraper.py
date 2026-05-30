@@ -30,6 +30,7 @@ import os
 import sys
 import json
 import time
+import random
 import hashlib
 import logging
 import argparse
@@ -192,17 +193,28 @@ class BaseScraper:
         self.results: list[dict] = []
 
     def fetch(self, url: str, referer: str = None, **kwargs) -> requests.Response | None:
-        """安全抓取，带重试和Referer"""
+        """安全抓取，带重试和Referer
+        
+        遵循君子协定：
+        - 随机延迟 1.2~3.8 秒，模拟真实用户浏览速度
+        - 遇到412立即停止（WAF拦截，重试无意义）
+        - 最多重试3次，退避递增
+        """
         headers = {}
         if referer:
             headers["Referer"] = referer
 
         for attempt in range(3):
+            # 请求前随机延迟（首次也延迟，模拟用户打开网页的间隔）
+            delay = random.uniform(1.2, 3.8)
+            logger.debug(f"延迟 {delay:.1f}s 后请求...")
+            time.sleep(delay)
+
             try:
                 resp = self.session.get(
                     url, timeout=self.timeout, headers=headers, **kwargs
                 )
-                # 412 = WAF拦截，不重试（重试也没用）
+                # 412 = WAF拦截，不重试
                 if resp.status_code == 412:
                     logger.warning(
                         f"HTTP 412 (WAF拦截): {url} — "
@@ -213,7 +225,8 @@ class BaseScraper:
                 return resp
             except requests.RequestException as e:
                 logger.warning(f"请求失败 (尝试 {attempt+1}/3): {url} - {e}")
-                time.sleep(5 * (attempt + 1))
+                # 重试前额外等待（退避策略）
+                time.sleep(random.uniform(2, 5) * (attempt + 1))
         return None
 
     def fetch_gov_site(self, url: str) -> requests.Response | None:
@@ -412,7 +425,7 @@ class RC114Scraper(BaseScraper):
                     self.results.append(job)
                     logger.info(f"[rc114] 发现: {pos} @ {company}")
 
-            time.sleep(3)
+            time.sleep(random.uniform(1.2, 3.8))
 
         logger.info(f"[rc114] 采集完成，共 {len(self.results)} 条")
         return self.results
