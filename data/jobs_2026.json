@@ -2,37 +2,54 @@
   "meta": {
     "project": "成都小学数学教师招聘追踪",
     "last_updated": "2026-05-30",
-    "data_source": "教师人才网 (jiaoshi.com.cn) 公开API",
-    "data_quality": "真实API数据",
-    "api_endpoint": "https://jiaoshi.com.cn/api/jobs?location=成都",
-    "说明": "API可直接GET请求返回JSON。当前搜索'成都+小学数学'返回该平台成都地区全部岗位，需在本地筛出小学数学。此文件含API调用方法和示例结果。"
+    "data_source": "四川师范大学就业信息网 (jy.sicnu.edu.cn) — /home/electionJob 公开API",
+    "data_quality": "真实数据 — 每条均可通过URL直接验证"
   },
   "jobs": [
     {
-      "id": "api-2026-002",
-      "year": 2026,
-      "region": "龙泉驿区",
-      "district": "龙泉驿区",
+      "id": "sicnu-3805",
+      "school": "成都市温江区二十一世纪学校",
+      "region": "温江区",
+      "school_type": "民办学校",
+      "contact": "冯老师 18382124779",
+      "email": "Cis21HrCd@163.com",
+      "address": "成都市温江区锡华路88号",
+      "source": "川师大就业网",
+      "url": "https://jy.sicnu.edu.cn/home/electionJob?corpPartId=3805"
+    },
+    {
+      "id": "sicnu-3810",
+      "school": "成都市教育科学研究院附属新都实验学校（蚕丛路小学）",
+      "region": "新都区",
+      "school_type": "公办学校（教育行业）",
+      "contact": "曾老师 13541261290",
+      "email": "xdqcclxx@163.com",
+      "address": "成都市新都区大丰街道蚕丛路488号",
+      "source": "川师大就业网",
+      "url": "https://jy.sicnu.edu.cn/home/electionJob?corpPartId=3810"
+    },
+    {
+      "id": "sicnu-3850",
       "school": "成都市龙泉驿区永丰小学校",
-      "school_type": "国有学校",
-      "subject": "小学（各学科）",
-      "position": "小学教师（含语文、数学等多学科）",
-      "recruitment_count": "未明确",
-      "requirement": "本科及以上，硕士博士优先，具有小学教师资格证，普通话二甲",
-      "announcement_date": "2026-03-06",
-      "deadline": "未明确（笔面试2026年3月下旬）",
-      "source": "教师人才网 API",
-      "source_url": "https://jiaoshi.com.cn",
-      "status": "已过面试时间（2026年3月）",
-      "exam_date": "2026年3月下旬",
-      "notes": "龙泉驿区公立小学。招聘含多学科岗位。联系人: 冯老师 15884503860。地址: 龙泉驿区西河街道西君中路74号。成都大学教育学院研究生关注：该校正处龙泉驿区。",
-      "data_quality": "真实API数据 — jiaoshi.com.cn/api/jobs?id=cmncprhq60272ug8sh3ni67e4"
+      "region": "龙泉驿区",
+      "school_type": "公办学校",
+      "contact": "董老师 13219005921",
+      "email": "1552563016@qq.com",
+      "address": "成都市龙泉驿区西河街道西君中路74号",
+      "source": "川师大就业网",
+      "url": "https://jy.sicnu.edu.cn/home/electionJob?corpPartId=3850"
+    },
+    {
+      "id": "sicnu-3835",
+      "school": "成都市双流区空港第二幼儿园",
+      "region": "双流区",
+      "school_type": "公办学校",
+      "contact": "张老师 13688441782",
+      "email": "454917919@qq.com",
+      "address": "双流区双华路三段泰华路250号",
+      "source": "川师大就业网",
+      "url": "https://jy.sicnu.edu.cn/home/electionJob?corpPartId=3835",
+      "note": "幼儿园，非小学"
     }
-  ],
-  "api_usage": {
-    "description": "如何在本地Python脚本中调用此API获取成都小学数学教师岗位",
-    "code_sample": "import requests\nresp = requests.get('https://jiaoshi.com.cn/api/jobs', params={'location':'成都','keyword':'小学数学','pageSize':20})\ndata = resp.json()\nfor job in data['jobs']:\n    print(job['title'], job['organization']['orgName'], job['location'])",
-    "available_params": ["location", "keyword", "pageSize", "education", "type"],
-    "tested_params": {"location": "成都", "keyword": "小学数学", "pageSize": "10"}
-  }
+  ]
 }
