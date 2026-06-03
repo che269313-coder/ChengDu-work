@@ -356,13 +356,159 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
 
 .footer .disclaimer { font-size: 12px; opacity: 0.7; margin-top: 4px; }
 
-/* --- Responsive --- */
+/* --- Responsive: Mobile First (< 768px) --- */
 @media (max-width: 768px) {
-    .container { padding: 0 12px; }
-    .header h1 { font-size: 22px; }
-    .toolbar { flex-direction: column; align-items: stretch; }
-    .filter-buttons { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
-    .stat-card { min-width: 120px; }
-    .stat-num { font-size: 24px; }
-    .advice-cards { grid-template-columns: 1fr; }
+    /* Container */
+    .container { padding: 0 10px; }
+
+    /* Header */
+    .header { padding: 16px 0 0; }
+    .header h1 { font-size: 18px; }
+    .header .subtitle { font-size: 12px; }
+    .header .update-time { font-size: 11px; }
+
+    /* Nav: horizontal scroll */
+    .nav {
+        padding: 0 10px;
+        gap: 2px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a {
+        padding: 8px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+        border-radius: 8px 8px 0 0;
+        flex-shrink: 0;
+    }
+
+    /* Main */
+    main { padding: 12px 0 32px; }
+
+    /* Toolbar */
+    .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+    #searchInput {
+        min-width: unset;
+        font-size: 16px;  /* prevent iOS zoom */
+        padding: 12px 16px;
+    }
+    .filter-buttons {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+        gap: 6px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .filter-buttons::-webkit-scrollbar { display: none; }
+    .filter-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Stats Panel */
+    .stats-panel {
+        padding: 16px;
+        gap: 10px;
+    }
+    .stats-panel h2 { font-size: 16px; margin-bottom: 10px; }
+    .stat-card {
+        min-width: unset;
+        flex: 1 1 calc(50% - 6px);
+        padding: 12px 10px;
+    }
+    .stat-card.total { flex: 1 1 100%; }
+    .stat-num { font-size: 28px; }
+
+    /* Upcoming Section */
+    .upcoming-section { padding: 14px 16px; }
+    .upcoming-list { flex-direction: column; gap: 8px; }
+    .upcoming-card { flex-wrap: wrap; font-size: 13px; gap: 6px; }
+
+    /* Year Tabs */
+    .year-tabs {
+        gap: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .year-tabs::-webkit-scrollbar { display: none; }
+    .year-tab {
+        padding: 8px 16px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    /* Region Section */
+    .region-section { margin: 10px 0; }
+    .region-title {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    /* ===== TABLE → CARD LAYOUT ===== */
+    .table-wrapper { overflow-x: visible; }
+    table, thead, tbody, th, td, tr { display: block; }
+    thead { display: none; }
+    tbody tr {
+        background: #fff;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        border: 1px solid #e8eaed;
+    }
+    tbody tr:hover { background: #fafbfc; }
+    td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 6px 0;
+        border: none;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    td + td { border-top: 1px solid #f1f3f4; }
+    td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-size: 11px;
+        color: #5f6368;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        flex-shrink: 0;
+        margin-right: 12px;
+        min-width: 36px;
+    }
+    /* 重要字段高亮 */
+    td[data-label="学校"] { font-size: 15px; font-weight: 600; padding-top: 2px; }
+    td[data-label="学校"]::before { font-size: 0; }  /* 隐藏学校标签，让它独占一行 */
+    td[data-label="学校"] a { font-size: 15px; }
+    td[data-label="截止"] { color: var(--color-closed); font-weight: 500; }
+    td[data-label="薪资"] { color: var(--color-active); font-weight: 600; }
+    td[data-label="状态"] .badge { font-size: 12px; padding: 4px 12px; }
+    td.notes { max-width: unset; }
+
+    /* Graduate Section */
+    .grad-intro { padding: 16px; }
+    .grad-intro h2 { font-size: 18px; }
+    .highlight-box { padding: 12px; }
+    .grad-section h3 { font-size: 16px; }
+
+    /* Advice */
+    .advice-section { padding: 16px; }
+    .advice-section h3 { font-size: 16px; }
+    .advice-cards { grid-template-columns: 1fr; gap: 10px; }
+    .advice-card { padding: 14px; }
+
+    /* Footer */
+    .footer { padding: 16px 0; font-size: 12px; margin-top: 24px; }
+
+    /* Year content heading */
+    .year-content h2 { font-size: 16px; margin: 10px 0; }
 }

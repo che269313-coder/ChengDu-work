@@ -304,17 +304,17 @@ def generate_index_page(jobs_by_year: dict) -> str:
 
                 html += f"""
                         <tr>
-                            <td>{school_cell}</td>
-                            <td>{job.get('position', '')}</td>
-                            <td>{job.get('school_type', '')}</td>
-                            <td>{job.get('recruitment_count', '—')}</td>
-                            <td>{job.get('requirement', '—')}</td>
-                            <td>{job.get('announcement_date', '')}</td>
-                            <td class="deadline">{job.get('deadline', '')}</td>
-                            <td>{job.get('exam_date', '')}</td>
-                            <td>{get_status_badge(job.get('status', ''))}</td>
-                            <td>{job.get('source', '')}</td>
-                            <td class="notes">{job.get('notes', '')}</td>
+                            <td data-label="学校">{school_cell}</td>
+                            <td data-label="岗位">{job.get('position', '')}</td>
+                            <td data-label="类型">{job.get('school_type', '')}</td>
+                            <td data-label="人数">{job.get('recruitment_count', '—')}</td>
+                            <td data-label="学历">{job.get('requirement', '—')}</td>
+                            <td data-label="发布">{job.get('announcement_date', '')}</td>
+                            <td data-label="截止" class="deadline">{job.get('deadline', '')}</td>
+                            <td data-label="考试">{job.get('exam_date', '')}</td>
+                            <td data-label="状态">{get_status_badge(job.get('status', ''))}</td>
+                            <td data-label="来源">{job.get('source', '')}</td>
+                            <td data-label="备注" class="notes">{job.get('notes', '')}</td>
                         </tr>"""
 
             html += """
@@ -421,16 +421,16 @@ def generate_grad_table(jobs: list[dict]) -> str:
 
         html += f"""
                 <tr>
-                    <td>{school_cell}</td>
-                    <td>{job.get('position', '')}</td>
-                    <td>{job['region']}</td>
-                    <td>{job.get('school_type', '')}</td>
-                    <td class="salary">{job.get('salary_range', '面议')}</td>
-                    <td>{job.get('requirement', '')}</td>
-                    <td class="deadline">{job.get('deadline', '')}</td>
-                    <td>{get_status_badge(job.get('status', ''))}</td>
-                    <td class="notes">{job.get('grad_advantage', '')}</td>
-                    <td>{tags_html}</td>
+                    <td data-label="学校">{school_cell}</td>
+                    <td data-label="岗位">{job.get('position', '')}</td>
+                    <td data-label="区域">{job['region']}</td>
+                    <td data-label="类型">{job.get('school_type', '')}</td>
+                    <td data-label="薪资" class="salary">{job.get('salary_range', '面议')}</td>
+                    <td data-label="学历">{job.get('requirement', '')}</td>
+                    <td data-label="截止" class="deadline">{job.get('deadline', '')}</td>
+                    <td data-label="状态">{get_status_badge(job.get('status', ''))}</td>
+                    <td data-label="优势" class="notes">{job.get('grad_advantage', '')}</td>
+                    <td data-label="标签">{tags_html}</td>
                 </tr>"""
 
     html += """

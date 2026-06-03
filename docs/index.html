@@ -363,15 +363,161 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
 
 .footer .disclaimer { font-size: 12px; opacity: 0.7; margin-top: 4px; }
 
-/* --- Responsive --- */
+/* --- Responsive: Mobile First (< 768px) --- */
 @media (max-width: 768px) {
-    .container { padding: 0 12px; }
-    .header h1 { font-size: 22px; }
-    .toolbar { flex-direction: column; align-items: stretch; }
-    .filter-buttons { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
-    .stat-card { min-width: 120px; }
-    .stat-num { font-size: 24px; }
-    .advice-cards { grid-template-columns: 1fr; }
+    /* Container */
+    .container { padding: 0 10px; }
+
+    /* Header */
+    .header { padding: 16px 0 0; }
+    .header h1 { font-size: 18px; }
+    .header .subtitle { font-size: 12px; }
+    .header .update-time { font-size: 11px; }
+
+    /* Nav: horizontal scroll */
+    .nav {
+        padding: 0 10px;
+        gap: 2px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a {
+        padding: 8px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+        border-radius: 8px 8px 0 0;
+        flex-shrink: 0;
+    }
+
+    /* Main */
+    main { padding: 12px 0 32px; }
+
+    /* Toolbar */
+    .toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+    #searchInput {
+        min-width: unset;
+        font-size: 16px;  /* prevent iOS zoom */
+        padding: 12px 16px;
+    }
+    .filter-buttons {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+        gap: 6px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .filter-buttons::-webkit-scrollbar { display: none; }
+    .filter-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Stats Panel */
+    .stats-panel {
+        padding: 16px;
+        gap: 10px;
+    }
+    .stats-panel h2 { font-size: 16px; margin-bottom: 10px; }
+    .stat-card {
+        min-width: unset;
+        flex: 1 1 calc(50% - 6px);
+        padding: 12px 10px;
+    }
+    .stat-card.total { flex: 1 1 100%; }
+    .stat-num { font-size: 28px; }
+
+    /* Upcoming Section */
+    .upcoming-section { padding: 14px 16px; }
+    .upcoming-list { flex-direction: column; gap: 8px; }
+    .upcoming-card { flex-wrap: wrap; font-size: 13px; gap: 6px; }
+
+    /* Year Tabs */
+    .year-tabs {
+        gap: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .year-tabs::-webkit-scrollbar { display: none; }
+    .year-tab {
+        padding: 8px 16px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    /* Region Section */
+    .region-section { margin: 10px 0; }
+    .region-title {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    /* ===== TABLE → CARD LAYOUT ===== */
+    .table-wrapper { overflow-x: visible; }
+    table, thead, tbody, th, td, tr { display: block; }
+    thead { display: none; }
+    tbody tr {
+        background: #fff;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        border: 1px solid #e8eaed;
+    }
+    tbody tr:hover { background: #fafbfc; }
+    td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 6px 0;
+        border: none;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    td + td { border-top: 1px solid #f1f3f4; }
+    td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-size: 11px;
+        color: #5f6368;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        flex-shrink: 0;
+        margin-right: 12px;
+        min-width: 36px;
+    }
+    /* 重要字段高亮 */
+    td[data-label="学校"] { font-size: 15px; font-weight: 600; padding-top: 2px; }
+    td[data-label="学校"]::before { font-size: 0; }  /* 隐藏学校标签，让它独占一行 */
+    td[data-label="学校"] a { font-size: 15px; }
+    td[data-label="截止"] { color: var(--color-closed); font-weight: 500; }
+    td[data-label="薪资"] { color: var(--color-active); font-weight: 600; }
+    td[data-label="状态"] .badge { font-size: 12px; padding: 4px 12px; }
+    td.notes { max-width: unset; }
+
+    /* Graduate Section */
+    .grad-intro { padding: 16px; }
+    .grad-intro h2 { font-size: 18px; }
+    .highlight-box { padding: 12px; }
+    .grad-section h3 { font-size: 16px; }
+
+    /* Advice */
+    .advice-section { padding: 16px; }
+    .advice-section h3 { font-size: 16px; }
+    .advice-cards { grid-template-columns: 1fr; gap: 10px; }
+    .advice-card { padding: 14px; }
+
+    /* Footer */
+    .footer { padding: 16px 0; font-size: 12px; margin-top: 24px; }
+
+    /* Year content heading */
+    .year-content h2 { font-size: 16px; margin: 10px 0; }
 }
 
     </style>
@@ -381,7 +527,7 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
         <div class="container">
             <h1>📋 成都小学数学教师招聘追踪系统</h1>
             <p class="subtitle">覆盖成都市23个区县 · 自动更新 · 每两天同步</p>
-            <p class="update-time">最后更新: 2026-05-30 11:31</p>
+            <p class="update-time">最后更新: 2026-06-03 23:28</p>
             <nav class="nav">
                 <a href="index.html" class="active">📊 全部招聘</a>
                 <a href="grad.html" >🎓 研究生专区</a>
@@ -419,52 +565,7 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                 <span>🟡 即将开始: 0</span>
                 <span>🔴 已截止: 0</span>
             </div>
-        </div><div class="stat-card total"><h3>总计</h3><div class="stat-num">4</div></div></div>
-    <div class="card" style="margin-top:16px">
-    <h2>📊 成都小学数学教师招聘信息（2025-2026）</h2>
-    <div class="table-wrapper">
-    <table>
-    <thead><tr>
-        <th>学校名称</th><th>区域</th><th>类型</th><th>联系人</th><th>地址</th><th>来源</th><th>详情</th>
-    </tr></thead>
-    <tbody>
-    <tr>
-        <td><strong>成都市金牛区嘉祥学校</strong></td>
-        <td>金牛区</td><td>公办（嘉祥集团）</td>
-        <td>葛芸 18428083513<br><small style="color:#666">JJX20240308@163.com</small></td>
-        <td>金牛区赛云台北支路333号</td>
-        <td>川师大-来校招聘</td>
-        <td><a href="https://jy.sicnu.edu.cn/home/zwPro/17025?code=1" target="_blank">查看详情</a></td>
-    </tr>
-    <tr style="background:#fafafa">
-        <td><strong>教科院附属新都实验学校</strong><br><small style="color:#888">（蚕丛路小学）</small></td>
-        <td>新都区</td><td>公办</td>
-        <td>曾老师 13541261290<br><small style="color:#666">xdqcclxx@163.com</small></td>
-        <td>新都区大丰街道蚕丛路488号</td>
-        <td>川师大-公众招聘</td>
-        <td><a href="https://jy.sicnu.edu.cn/home/electionJob?corpPartId=3810" target="_blank">查看详情</a></td>
-    </tr>
-    <tr>
-        <td><strong>龙泉驿区永丰小学校</strong></td>
-        <td>龙泉驿区</td><td>公办</td>
-        <td>董老师 13219005921<br><small style="color:#666">1552563016@qq.com</small></td>
-        <td>龙泉驿区西河街道西君中路74号</td>
-        <td>川师大-公众招聘<br><small style="color:#888">+ 教师人才网</small></td>
-        <td><a href="https://jy.sicnu.edu.cn/home/electionJob?corpPartId=3850" target="_blank">查看详情</a></td>
-    </tr>
-    <tr style="background:#fafafa">
-        <td><strong>温江区二十一世纪学校</strong></td>
-        <td>温江区</td><td>民办</td>
-        <td>冯老师 18382124779<br><small style="color:#666">Cis21HrCd@163.com</small></td>
-        <td>温江区锡华路88号</td>
-        <td>川师大-公众招聘</td>
-        <td><a href="https://jy.sicnu.edu.cn/home/electionJob?corpPartId=3805" target="_blank">查看详情</a></td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    </div>
-    <div style="display:none"><div class="year-content" data-year="2026" ><h2>2026年 小学数学教师招聘信息</h2>
+        </div><div class="stat-card total"><h3>总计</h3><div class="stat-num">7</div></div></div><div class="upcoming-section" id="upcoming"><h2>⏰ 近期即将开始的招聘（重点关注）</h2><div class="upcoming-list"></div></div><div class="year-tabs"><button class="year-tab active" data-year="2026" onclick="switchYear('2026')">2026年</button><button class="year-tab " data-year="2025" onclick="switchYear('2025')">2025年</button></div><div class="year-content" data-year="2026" ><h2>2026年 小学数学教师招聘信息</h2>
         <div class="region-section">
             <h3 class="region-title">📍 金牛区 (1个岗位)</h3>
             <div class="table-wrapper">
@@ -486,17 +587,17 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                     </thead>
                     <tbody>
                         <tr>
-                            <td>成都市金牛区嘉祥学校</td>
-                            <td></td>
-                            <td>公办（嘉祥教育集团）</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                            <td class="deadline"></td>
-                            <td></td>
-                            <td><span class="badge badge-info"></span></td>
-                            <td>川师大就业网-来校招聘</td>
-                            <td class="notes"></td>
+                            <td data-label="学校">成都市金牛区嘉祥学校</td>
+                            <td data-label="岗位"></td>
+                            <td data-label="类型">公办（嘉祥教育集团）</td>
+                            <td data-label="人数">—</td>
+                            <td data-label="学历">—</td>
+                            <td data-label="发布"></td>
+                            <td data-label="截止" class="deadline"></td>
+                            <td data-label="考试"></td>
+                            <td data-label="状态"><span class="badge badge-info"></span></td>
+                            <td data-label="来源">川师大就业网-来校招聘</td>
+                            <td data-label="备注" class="notes"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -523,17 +624,17 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                     </thead>
                     <tbody>
                         <tr>
-                            <td>成都市龙泉驿区永丰小学校</td>
-                            <td></td>
-                            <td>公办</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                            <td class="deadline"></td>
-                            <td></td>
-                            <td><span class="badge badge-info"></span></td>
-                            <td>川师大就业网-公众招聘</td>
-                            <td class="notes"></td>
+                            <td data-label="学校">成都市龙泉驿区永丰小学校</td>
+                            <td data-label="岗位"></td>
+                            <td data-label="类型">公办</td>
+                            <td data-label="人数">—</td>
+                            <td data-label="学历">—</td>
+                            <td data-label="发布"></td>
+                            <td data-label="截止" class="deadline"></td>
+                            <td data-label="考试"></td>
+                            <td data-label="状态"><span class="badge badge-info"></span></td>
+                            <td data-label="来源">川师大就业网-公众招聘</td>
+                            <td data-label="备注" class="notes"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -560,17 +661,17 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                     </thead>
                     <tbody>
                         <tr>
-                            <td>成都市教育科学研究院附属新都实验学校（蚕丛路小学）</td>
-                            <td></td>
-                            <td>公办</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                            <td class="deadline"></td>
-                            <td></td>
-                            <td><span class="badge badge-info"></span></td>
-                            <td>川师大就业网-公众招聘</td>
-                            <td class="notes"></td>
+                            <td data-label="学校">成都市教育科学研究院附属新都实验学校（蚕丛路小学）</td>
+                            <td data-label="岗位"></td>
+                            <td data-label="类型">公办</td>
+                            <td data-label="人数">—</td>
+                            <td data-label="学历">—</td>
+                            <td data-label="发布"></td>
+                            <td data-label="截止" class="deadline"></td>
+                            <td data-label="考试"></td>
+                            <td data-label="状态"><span class="badge badge-info"></span></td>
+                            <td data-label="来源">川师大就业网-公众招聘</td>
+                            <td data-label="备注" class="notes"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -597,17 +698,17 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                     </thead>
                     <tbody>
                         <tr>
-                            <td>成都市温江区二十一世纪学校</td>
-                            <td></td>
-                            <td>民办</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                            <td class="deadline"></td>
-                            <td></td>
-                            <td><span class="badge badge-info"></span></td>
-                            <td>川师大就业网-公众招聘</td>
-                            <td class="notes"></td>
+                            <td data-label="学校">成都市温江区二十一世纪学校</td>
+                            <td data-label="岗位"></td>
+                            <td data-label="类型">民办</td>
+                            <td data-label="人数">—</td>
+                            <td data-label="学历">—</td>
+                            <td data-label="发布"></td>
+                            <td data-label="截止" class="deadline"></td>
+                            <td data-label="考试"></td>
+                            <td data-label="状态"><span class="badge badge-info"></span></td>
+                            <td data-label="来源">川师大就业网-公众招聘</td>
+                            <td data-label="备注" class="notes"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -634,17 +735,17 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                     </thead>
                     <tbody>
                         <tr>
-                            <td><a href="https://jiaoshi.com.cn" target="_blank">四川省成都列五中学</a></td>
-                            <td>初中生物教师（储备）</td>
-                            <td>公办（储备教师）</td>
-                            <td>未明确</td>
-                            <td>本科及以上</td>
-                            <td>2025-05-29</td>
-                            <td class="deadline">未明确</td>
-                            <td>未明确</td>
-                            <td><span class="badge badge-active">进行中</span></td>
-                            <td>教师人才网 (jiaoshi.com.cn)</td>
-                            <td class="notes">邮箱: cdlwzx@vip.163.com。地址: 成都市双林路双园巷9号。储备教师岗位，非编制。注意：非小学数学岗。</td>
+                            <td data-label="学校"><a href="https://jiaoshi.com.cn" target="_blank">四川省成都列五中学</a></td>
+                            <td data-label="岗位">初中生物教师（储备）</td>
+                            <td data-label="类型">公办（储备教师）</td>
+                            <td data-label="人数">未明确</td>
+                            <td data-label="学历">本科及以上</td>
+                            <td data-label="发布">2025-05-29</td>
+                            <td data-label="截止" class="deadline">未明确</td>
+                            <td data-label="考试">未明确</td>
+                            <td data-label="状态"><span class="badge badge-active">进行中</span></td>
+                            <td data-label="来源">教师人才网 (jiaoshi.com.cn)</td>
+                            <td data-label="备注" class="notes">邮箱: cdlwzx@vip.163.com。地址: 成都市双林路双园巷9号。储备教师岗位，非编制。注意：非小学数学岗。</td>
                         </tr>
                     </tbody>
                 </table>
@@ -671,17 +772,17 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                     </thead>
                     <tbody>
                         <tr>
-                            <td><a href="https://jiaoshi.com.cn" target="_blank">成都市龙泉驿区永丰小学</a></td>
-                            <td>心理辅导教师</td>
-                            <td>国有学校</td>
-                            <td>未明确</td>
-                            <td>本科及以上，硕士博士优先</td>
-                            <td>2026-03-06</td>
-                            <td class="deadline">未明确（2026年3月下旬面试）</td>
-                            <td>2026年3月下旬</td>
-                            <td><span class="badge badge-active">进行中</span></td>
-                            <td>教师人才网 (jiaoshi.com.cn)</td>
-                            <td class="notes">联系人: 冯老师 15884503860，邮箱: lqyqyfxx2021@163.com。地址: 龙泉驿区西河街道西君中路74号。注意：非小学数学岗，但学校在龙泉驿区（成都大学所在区）。</td>
+                            <td data-label="学校"><a href="https://jiaoshi.com.cn" target="_blank">成都市龙泉驿区永丰小学</a></td>
+                            <td data-label="岗位">心理辅导教师</td>
+                            <td data-label="类型">国有学校</td>
+                            <td data-label="人数">未明确</td>
+                            <td data-label="学历">本科及以上，硕士博士优先</td>
+                            <td data-label="发布">2026-03-06</td>
+                            <td data-label="截止" class="deadline">未明确（2026年3月下旬面试）</td>
+                            <td data-label="考试">2026年3月下旬</td>
+                            <td data-label="状态"><span class="badge badge-active">进行中</span></td>
+                            <td data-label="来源">教师人才网 (jiaoshi.com.cn)</td>
+                            <td data-label="备注" class="notes">联系人: 冯老师 15884503860，邮箱: lqyqyfxx2021@163.com。地址: 龙泉驿区西河街道西君中路74号。注意：非小学数学岗，但学校在龙泉驿区（成都大学所在区）。</td>
                         </tr>
                     </tbody>
                 </table>
@@ -708,26 +809,25 @@ td.salary { color: var(--color-active); font-weight: 600; white-space: nowrap; }
                     </thead>
                     <tbody>
                         <tr>
-                            <td><a href="https://jiaoshi.com.cn" target="_blank">成都市新都区毗河中学校</a></td>
-                            <td>初中数学教师</td>
-                            <td>国有学校（校聘，无编）</td>
-                            <td>未明确</td>
-                            <td>本科及以上，40岁以下</td>
-                            <td>2025-05-12</td>
-                            <td class="deadline">2025-06-02</td>
-                            <td>2025-06-07（笔试）2025-06-08（面试）</td>
-                            <td><span class="badge badge-closed">已截止</span></td>
-                            <td>教师人才网 (jiaoshi.com.cn)</td>
-                            <td class="notes">报名邮箱: cdsxdphzx@163.com。薪酬参照公办初中同岗位有编教师标准。地址: 新都区翰香路275号</td>
+                            <td data-label="学校"><a href="https://jiaoshi.com.cn" target="_blank">成都市新都区毗河中学校</a></td>
+                            <td data-label="岗位">初中数学教师</td>
+                            <td data-label="类型">国有学校（校聘，无编）</td>
+                            <td data-label="人数">未明确</td>
+                            <td data-label="学历">本科及以上，40岁以下</td>
+                            <td data-label="发布">2025-05-12</td>
+                            <td data-label="截止" class="deadline">2025-06-02</td>
+                            <td data-label="考试">2025-06-07（笔试）2025-06-08（面试）</td>
+                            <td data-label="状态"><span class="badge badge-closed">已截止</span></td>
+                            <td data-label="来源">教师人才网 (jiaoshi.com.cn)</td>
+                            <td data-label="备注" class="notes">报名邮箱: cdsxdphzx@163.com。薪酬参照公办初中同岗位有编教师标准。地址: 新都区翰香路275号</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-        </div></div>
-    </main>
+        </div></div>    </main>
     <footer class="footer">
         <div class="container">
-            <p>成都小学数学教师招聘追踪系统 · 自动更新于 2026-05-30 11:31</p>
+            <p>成都小学数学教师招聘追踪系统 · 自动更新于 2026-06-03 23:28</p>
             <p class="disclaimer">⚠️ 数据来源于公开渠道，仅供参考，请以官方公告为准。</p>
         </div>
     </footer>
