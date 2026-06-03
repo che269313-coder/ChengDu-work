@@ -25,4 +25,4 @@ Thumbs.db
 ~$*
 
 # 输出目录（HTML是最终产物，不过保留在git中）
-# output/*.html  # 如果希望跟踪HTML变化，取消注释
+# docs/*.html  # 如果希望跟踪HTML变化，取消注释

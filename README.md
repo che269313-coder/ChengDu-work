@@ -32,7 +32,7 @@ cdu_teacher_jobs/
 │   ├── update_html.py           # HTML生成器（读取JSON生成页面）
 │   └── install_scheduler.ps1    # Windows定时任务安装脚本
 │
-├── output/                      # 输出目录（浏览器直接打开）
+├── docs/                        # 输出目录（GitHub Pages /docs）
 │   ├── index.html               # 主页面（全部招聘）
 │   ├── grad.html                # 研究生专区页面
 │   └── style.css                # 统一样式表
@@ -108,7 +108,7 @@ python scripts/scraper.py
 python scripts/update_html.py
 
 # 用浏览器打开
-start output/index.html
+start docs/index.html
 ```
 
 ### 3. 设置自动更新
